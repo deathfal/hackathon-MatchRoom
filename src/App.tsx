@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Questionnaire from './Pages/Questionnaire'
 import Home from './Pages/Home';
+import Maps from './Pages/maps';
 // import Favorites from './Pages/favorites';
 // import Login from './Pages/Login';
 // import Preferences from './Pages/Preferences';
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/questionnaire" element={<Questionnaire />} />
         <Route path="/" element={<Home />} />
+        <Route path="/maps" element={<Maps />} />
         {/* <Route path="/favorites" element={<Favorites />} />
         <Route path="/login" element={<Login />} />
         <Route path="/preferences" element={<Preferences />} />
