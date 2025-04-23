@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Questionnaire from './Pages/Questionnaire'
-import Home from './Pages/Home';
+import Home from './Pages/Home'
+import Maps from './Pages/Maps';
 // import Favorites from './Pages/favorites';
 // import Login from './Pages/Login';
 // import Preferences from './Pages/Preferences';
