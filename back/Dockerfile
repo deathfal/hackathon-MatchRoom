@@ -66,6 +66,7 @@ ENV FRANKENPHP_WORKER_CONFIG=watch
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
 
 RUN set -eux; \
+	composer require symfony/serializer symfony/maker-bundle symfony/validator; \
 	install-php-extensions \
 		xdebug \
 	;
@@ -86,6 +87,7 @@ COPY --link frankenphp/conf.d/20-app.prod.ini $PHP_INI_DIR/app.conf.d/
 # prevent the reinstallation of vendors at every changes in the source code
 COPY --link composer.* symfony.* ./
 RUN set -eux; \
+	composer require symfony/serializer symfony/maker-bundle symfony/validator; \
 	composer install --no-cache --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress
 
 # copy sources

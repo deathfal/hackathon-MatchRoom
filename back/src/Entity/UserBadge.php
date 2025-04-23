@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserBadgeRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserBadgeRepository::class)]
@@ -14,50 +15,50 @@ class UserBadge
     private ?int $id = null;
 
     #[ORM\ManyToOne]
-    private ?Traveler $travelerÂ_id = null;
+    private ?Traveler $traveler = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?badge $badge_id = null;
+    private ?Badge $badge = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?\DateTimeImmutable $awardedAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $awardedAt = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTravelerÂId(): ?Traveler
+    public function getTraveler(): ?Traveler
     {
-        return $this->travelerÂ_id;
+        return $this->traveler;
     }
 
-    public function setTravelerÂId(?Traveler $travelerÂ_id): static
+    public function setTraveler(?Traveler $traveler): static
     {
-        $this->travelerÂ_id = $travelerÂ_id;
+        $this->traveler = $traveler;
 
         return $this;
     }
 
-    public function getBadgeId(): ?badge
+    public function getBadge(): ?Badge
     {
-        return $this->badge_id;
+        return $this->badge;
     }
 
-    public function setBadgeId(?badge $badge_id): static
+    public function setBadge(?Badge $badge): static
     {
-        $this->badge_id = $badge_id;
+        $this->badge = $badge;
 
         return $this;
     }
 
-    public function getAwardedAt(): ?\DateTimeImmutable
+    public function getAwardedAt(): ?\DateTimeInterface
     {
         return $this->awardedAt;
     }
 
-    public function setAwardedAt(?\DateTimeImmutable $awardedAt): static
+    public function setAwardedAt(?\DateTimeInterface $awardedAt): static
     {
         $this->awardedAt = $awardedAt;
 
