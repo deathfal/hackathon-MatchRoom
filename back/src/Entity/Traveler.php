@@ -26,11 +26,16 @@ class Traveler
     #[ORM\Column(length: 100)]
     private ?string $lastName = null;
 
-    #[ORM\Column(type: Types::BIGINT)]
+    #[ORM\Column(type: Types::BIGINT, nullable: true)]
     private ?string $tel = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
