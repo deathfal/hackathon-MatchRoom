@@ -33,6 +33,14 @@ export default function HotelQuestionnaire() {
   const [answers, setAnswers] = useState<Record<number, string>>({})
   const [animateDirection, setAnimateDirection] = useState<"next" | "prev" | null>(null)
 
+  // Définition des couleurs uniformes pour toutes les options
+  const optionColors = [
+    { color: "#2c3e50", darkColor: "#1a2530" }, // Option 1
+    { color: "#34495e", darkColor: "#2c3e50" }, // Option 2
+    { color: "#455a64", darkColor: "#37474f" }, // Option 3
+    { color: "#546e7a", darkColor: "#455a64" }, // Option 4
+  ]
+
   const questions: Question[] = [
     {
       id: 1,
@@ -43,32 +51,32 @@ export default function HotelQuestionnaire() {
           id: "leisure",
           text: "Loisirs",
           description: "Vacances, tourisme, détente",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <PalmtreeIcon size={24} color="white" />,
         },
         {
           id: "business",
           text: "Affaires",
           description: "Voyage professionnel, conférence",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "family",
           text: "Famille",
           description: "Voyage en famille avec enfants",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "romance",
           text: "Romance",
           description: "Voyage en couple, lune de miel",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Bed size={24} color="white" />,
         },
       ],
@@ -82,32 +90,32 @@ export default function HotelQuestionnaire() {
           id: "budget",
           text: "Économique",
           description: "Moins de 100€ par nuit",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <CreditCard size={24} color="white" />,
         },
         {
           id: "midrange",
           text: "Intermédiaire",
           description: "Entre 100€ et 200€ par nuit",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <CreditCard size={24} color="white" />,
         },
         {
           id: "luxury",
           text: "Luxe",
           description: "Entre 200€ et 400€ par nuit",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <CreditCard size={24} color="white" />,
         },
         {
           id: "premium",
           text: "Premium",
           description: "Plus de 400€ par nuit",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <CreditCard size={24} color="white" />,
         },
       ],
@@ -121,32 +129,32 @@ export default function HotelQuestionnaire() {
           id: "short",
           text: "Court séjour",
           description: "1 à 3 nuits",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "medium",
           text: "Séjour moyen",
           description: "4 à 7 nuits",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "long",
           text: "Long séjour",
           description: "1 à 2 semaines",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "extended",
           text: "Séjour prolongé",
           description: "Plus de 2 semaines",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Building size={24} color="white" />,
         },
       ],
@@ -160,32 +168,32 @@ export default function HotelQuestionnaire() {
           id: "city",
           text: "Centre-ville",
           description: "Proximité des attractions principales",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "beach",
           text: "Bord de mer",
           description: "Vue et accès à la plage",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Waves size={24} color="white" />,
         },
         {
           id: "mountain",
           text: "Montagne",
           description: "Nature et air frais",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Mountain size={24} color="white" />,
         },
         {
           id: "quiet",
           text: "Zone calme",
           description: "Loin de l'agitation touristique",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <PalmtreeIcon size={24} color="white" />,
         },
       ],
@@ -199,32 +207,32 @@ export default function HotelQuestionnaire() {
           id: "hotel",
           text: "Hôtel standard",
           description: "Services complets, confort",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "resort",
           text: "Resort tout inclus",
           description: "Séjour sans souci, activités sur place",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "apartment",
           text: "Appartement",
           description: "Plus d'espace, cuisine équipée",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "boutique",
           text: "Hôtel boutique",
           description: "Petite taille, design unique",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Building size={24} color="white" />,
         },
       ],
@@ -238,32 +246,32 @@ export default function HotelQuestionnaire() {
           id: "pool",
           text: "Piscine",
           description: "Pour se rafraîchir et se détendre",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Waves size={24} color="white" />,
         },
         {
           id: "wifi",
           text: "Wi-Fi haut débit",
           description: "Connectivité optimale",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Wifi size={24} color="white" />,
         },
         {
           id: "breakfast",
           text: "Petit-déjeuner inclus",
           description: "Commencer la journée du bon pied",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Coffee size={24} color="white" />,
         },
         {
           id: "fitness",
           text: "Salle de sport",
           description: "Maintenir votre routine fitness",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
       ],
@@ -277,32 +285,32 @@ export default function HotelQuestionnaire() {
           id: "not_important",
           text: "Peu importante",
           description: "Je mange souvent à l'extérieur",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Utensils size={24} color="white" />,
         },
         {
           id: "breakfast_only",
           text: "Petit-déjeuner uniquement",
           description: "Essentiel pour bien démarrer",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Coffee size={24} color="white" />,
         },
         {
           id: "restaurant",
           text: "Bon restaurant sur place",
           description: "Pour les dîners sans se déplacer",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Utensils size={24} color="white" />,
         },
         {
           id: "all_inclusive",
           text: "Tout inclus",
           description: "Maximum de confort et simplicité",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Utensils size={24} color="white" />,
         },
       ],
@@ -316,32 +324,32 @@ export default function HotelQuestionnaire() {
           id: "solo",
           text: "Seul(e)",
           description: "Voyage en solo",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "couple",
           text: "En couple",
           description: "Voyage romantique à deux",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "family",
           text: "En famille",
           description: "Avec enfants",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "friends",
           text: "Entre amis",
           description: "Voyage en groupe",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
       ],
@@ -355,32 +363,32 @@ export default function HotelQuestionnaire() {
           id: "walk",
           text: "À pied",
           description: "Proximité des attractions principales",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "public",
           text: "Transports publics",
           description: "Accès facile aux bus/métro",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "taxi",
           text: "Taxi/VTC",
           description: "Flexibilité et confort",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
         {
           id: "car",
           text: "Voiture de location",
           description: "Liberté de déplacement complète",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
       ],
@@ -394,32 +402,32 @@ export default function HotelQuestionnaire() {
           id: "price",
           text: "Prix",
           description: "Budget est la priorité absolue",
-          color: "#5ebfb0",
-          darkColor: "#4ca799",
+          color: optionColors[0].color,
+          darkColor: optionColors[0].darkColor,
           icon: <CreditCard size={24} color="white" />,
         },
         {
           id: "location",
           text: "Emplacement",
           description: "Situation idéale est essentielle",
-          color: "#4a5db7",
-          darkColor: "#3a4da7",
+          color: optionColors[1].color,
+          darkColor: optionColors[1].darkColor,
           icon: <Building size={24} color="white" />,
         },
         {
           id: "comfort",
           text: "Confort",
           description: "Qualité des chambres et du service",
-          color: "#f0c675",
-          darkColor: "#e0b665",
+          color: optionColors[2].color,
+          darkColor: optionColors[2].darkColor,
           icon: <Bed size={24} color="white" />,
         },
         {
           id: "reviews",
           text: "Avis clients",
           description: "Expériences des autres voyageurs",
-          color: "#f88f7c",
-          darkColor: "#e87f6c",
+          color: optionColors[3].color,
+          darkColor: optionColors[3].darkColor,
           icon: <Briefcase size={24} color="white" />,
         },
       ],
@@ -480,11 +488,11 @@ export default function HotelQuestionnaire() {
   const canGoNext = answers[currentQuestion.id] !== undefined
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#f8f8f2] to-[#eeeee6] text-gray-800">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-[#f9f7f4] to-[#eee9e0] text-gray-800">
       {/* Header */}
       <div className="flex justify-between items-center p-4 relative z-10">
         <button
-          className="text-blue-600 w-10 h-10 flex items-center justify-center rounded-full hover:bg-blue-50 transition-colors"
+          className="text-[#4a5568] w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
           onClick={handleBack}
           disabled={currentQuestionIndex === 0}
         >
@@ -495,7 +503,7 @@ export default function HotelQuestionnaire() {
         </div>
         <button
           onClick={handleSkip}
-          className="text-blue-600 text-sm font-medium px-3 py-1.5 rounded-full hover:bg-blue-50 transition-colors"
+          className="text-[#4a5568] text-sm font-medium px-3 py-1.5 rounded-full hover:bg-gray-100 transition-colors"
         >
           Passer
         </button>
@@ -511,7 +519,7 @@ export default function HotelQuestionnaire() {
         `}
       >
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{currentQuestion.title}</h1>
+          <h1 className="text-3xl font-bold mb-2 text-[#2d3748]">{currentQuestion.title}</h1>
           {currentQuestion.subtitle && <p className="text-gray-500">{currentQuestion.subtitle}</p>}
         </div>
 
@@ -554,7 +562,7 @@ export default function HotelQuestionnaire() {
           <div className="w-full max-w-[calc(100%-4rem)] mr-4">
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gray-800 rounded-full transition-all duration-300"
+                className="h-full bg-[#2c3e50] rounded-full transition-all duration-300"
                 style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
               ></div>
             </div>
@@ -567,7 +575,7 @@ export default function HotelQuestionnaire() {
             className={`
               w-14 h-14 rounded-full flex items-center justify-center text-white transition-all duration-300
               shadow-md hover:shadow-lg transform hover:-translate-y-1
-              ${canGoNext ? "bg-black" : "bg-gray-400"}
+              ${canGoNext ? "bg-[#2c3e50]" : "bg-gray-400"}
             `}
             onClick={handleNext}
             disabled={!canGoNext}
