@@ -1,12 +1,14 @@
 "use client"
 
-import { useState } from "react"
-import { Heart, Search, Home, Bell, User } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Heart, Search, Home, Bell, User, Menu, X } from "lucide-react"
 import { useNavigate, useLocation } from "react-router-dom"
 
 export default function BottomMenu() {
   const navigate = useNavigate()
   const location = useLocation()
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
   
   // Déterminer l'onglet actif en fonction de l'URL actuelle
   const getActiveTab = () => {
@@ -32,8 +34,144 @@ export default function BottomMenu() {
   const handleTabClick = (tabId: string, path: string) => {
     setActiveTab(tabId)
     navigate(path) // Redirection vers la page correspondante
+    if (isDesktop) {
+      setIsMenuOpen(false) // Ferme le menu après avoir cliqué sur un élément (sur desktop)
+    }
   }
 
+  // Basculer l'état du menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
+  }
+
+  // Détecter les changements de taille d'écran
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Fermer le menu si on clique en dehors
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const menuElement = document.getElementById('desktop-menu');
+      const menuButton = document.getElementById('menu-toggle-button');
+      
+      if (
+        isMenuOpen && 
+        menuElement && 
+        !menuElement.contains(event.target as Node) && 
+        menuButton && 
+        !menuButton.contains(event.target as Node)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMenuOpen]);
+
+  // Menu desktop (latéral)
+  if (isDesktop) {
+    return (
+      <>
+        {/* Bouton pour ouvrir le menu */}
+        <button 
+          id="menu-toggle-button"
+          onClick={toggleMenu} 
+          className="fixed top-4 right-4 z-30 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-all"
+          aria-label={isMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+        
+        {/* Overlay semi-transparent pour assombrir légèrement le fond */}
+        {isMenuOpen && (
+          <div 
+            className="fixed inset-0 bg-gray-600/30 backdrop-blur-sm z-20 transition-opacity duration-300"
+            onClick={() => setIsMenuOpen(false)}
+          />
+        )}
+        
+        {/* Menu latéral à droite */}
+        <div 
+          id="desktop-menu"
+          className={`
+            fixed right-0 top-0 h-full bg-white/95 backdrop-blur-sm shadow-lg flex flex-col z-20
+            transition-all duration-300 transform 
+            ${isMenuOpen ? "translate-x-0 w-64" : "translate-x-[100%] w-0 overflow-hidden"}
+          `}
+        >
+          <div className="p-4 mb-6 flex items-center justify-between">
+            <div className="w-8 h-8 bg-purple-600 rounded-md flex items-center justify-center text-white font-bold">
+              M
+            </div>
+          </div>
+          
+          <div className="flex-1 px-3">
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              const isActive = activeTab === item.id
+              
+              return (
+                <button 
+                  key={item.id} 
+                  onClick={() => handleTabClick(item.id, item.path)} 
+                  className={`
+                    w-full flex items-center py-3 px-3 mb-2 rounded-lg transition-colors
+                    ${isActive 
+                      ? "bg-purple-50 text-purple-600" 
+                      : "text-gray-600 hover:bg-gray-50"
+                    }
+                  `}
+                >
+                  <div className={`
+                    flex items-center justify-center
+                    ${isActive ? "text-purple-600" : "text-gray-500"}
+                  `}>
+                    <Icon size={isActive ? 22 : 20} />
+                  </div>
+                  <span className={`
+                    ml-3 font-medium whitespace-nowrap
+                    ${isActive ? "text-purple-600" : "text-gray-700"}
+                  `}>
+                    {item.label}
+                  </span>
+                  {isActive && (
+                    <div className="ml-auto w-1 h-6 bg-purple-600 rounded-full"></div>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+          
+          <div className="p-4 mt-auto border-t border-gray-100">
+            <div className="flex items-center">
+              <div className="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0">
+                <img
+                  src="/placeholder.svg?height=32&width=32"
+                  alt="Profile"
+                  className="object-cover h-full w-full rounded-full"
+                />
+              </div>
+              <div className="ml-3">
+                <p className="font-medium text-sm text-gray-800">User 29</p>
+                <p className="text-xs text-gray-500">user29@example.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  // Menu mobile (en bas)
   return (
     <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-100 border-t">
       <div className="flex justify-around items-center py-2 max-w-screen-2xl mx-auto">
@@ -50,7 +188,7 @@ export default function BottomMenu() {
               >
                 <Icon size={20} className="md:w-6 md:h-6" />
               </div>
-              <span className="text-xs md:text-sm mt-1 hidden md:block">
+              <span className="text-xs md:text-sm mt-1">
                 {item.label}
               </span>
             </button>

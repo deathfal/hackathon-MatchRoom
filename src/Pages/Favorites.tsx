@@ -10,7 +10,7 @@ export default function Favorites() {
           <h1 className="text-2xl font-bold text-gray-800 md:text-3xl">VOS FAVORIS</h1>
           <p className="text-xl text-gray-700 md:text-2xl">User 29 !</p>
         </div>
-        <div className="relative">
+        <div className="relative mr-16 lg:mr-15">
           <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden md:h-20 md:w-20">
             <img
               src="/placeholder.svg?height=64&width=64"
