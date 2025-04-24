@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { ChevronLeft, Star, X, Check, Clock, Send, MessageSquare, Hotel } from "lucide-react"
+import { ChevronLeft, Star, X, Clock, Send, MessageSquare, Hotel } from "lucide-react"
 import BottomMenu from "../components/bottom-menu"
 import { motion, AnimatePresence } from "framer-motion"
 
