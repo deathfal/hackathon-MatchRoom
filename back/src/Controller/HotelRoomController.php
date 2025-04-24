@@ -52,7 +52,7 @@ class HotelRoomController extends AbstractController
         });
 
         if (empty($hotelData)) {
-            return new JsonResponse(['error' => 'Hotel not found in the dataset'], JsonResponse::HTTP_NOT_FOUND);
+            return new JsonResponse(['error' => 'Hotel not found in the datasett'], JsonResponse::HTTP_NOT_FOUND);
         }
 
         // Extract available rooms
