@@ -76,7 +76,7 @@ export default function SignupCustomer() {
       console.log("Form submitted:", formState);
       setIsSubmitting(false);
       
-      navigate("/questionnaire");
+      navigate("/signup-complete");
     }, 1500);
   };
 
