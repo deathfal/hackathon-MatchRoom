@@ -11,6 +11,7 @@ import SignupCustomer from './Pages/SignupCustomer';
 import SignupHotel from './Pages/SignupHotel';
 import SignupType from './Pages/SignupType';
 import SignupComplete from './Pages/SignupComplete';
+import Search  from './Pages/search';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/rewards" element={<Rewards />} />
         <Route path="/profil" element={<Profil />} />
+        <Route path="/search" element={<Search />} />
         {/*
         <Route path="/login" element={<Login />} />
         <Route path="/preferences" element={<Preferences />} />
