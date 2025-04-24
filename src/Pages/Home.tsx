@@ -1,6 +1,29 @@
+import { useState, useEffect } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 import BottomMenu from "../components/bottom-menu"
+import { X, AlertCircle } from "lucide-react"
 
 export default function Home() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [showQuestionnairePopup, setShowQuestionnairePopup] = useState(false)
+
+  // Vérifier si l'utilisateur vient de terminer son inscription
+  useEffect(() => {
+    // Détection du paramètre de redirection depuis la page de confirmation d'inscription
+    if (location.state?.fromSignupComplete) {
+      setShowQuestionnairePopup(true)
+    }
+  }, [location])
+
+  const handleStartQuestionnaire = () => {
+    navigate("/questionnaire")
+  }
+
+  const handleDismissPopup = () => {
+    setShowQuestionnairePopup(false)
+  }
+
   return (
     <div className="w-full bg-white min-h-screen flex flex-col">
       {/* Header */}
@@ -103,6 +126,56 @@ export default function Home() {
           </div>
         </section>
       </main>
+
+      {/* Popup pour le questionnaire */}
+      {showQuestionnairePopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
+            <div className="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <AlertCircle size={20} />
+                <h3 className="text-lg font-medium">Personnaliser votre expérience</h3>
+              </div>
+              <button 
+                onClick={handleDismissPopup}
+                className="rounded-full hover:bg-white/20 p-1 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-5">
+              <p className="mb-4">
+                Pour vous proposer des hôtels qui correspondent parfaitement à vos préférences, nous avons préparé un questionnaire rapide.
+              </p>
+              
+              <div className="mb-5 bg-blue-50 p-3 rounded-lg">
+                <ul className="text-sm list-disc pl-5 space-y-1">
+                  <li>10 questions rapides (moins de 2 minutes)</li>
+                  <li>Des suggestions d'hôtels personnalisées</li>
+                  <li>Des offres adaptées à vos préférences</li>
+                  <li>Une meilleure expérience utilisateur</li>
+                </ul>
+              </div>
+              
+              <div className="flex justify-between gap-3">
+                <button
+                  onClick={handleDismissPopup}
+                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors flex-1"
+                >
+                  Plus tard
+                </button>
+                <button
+                  onClick={handleStartQuestionnaire}
+                  className="px-4 py-2 rounded-lg bg-[#2c3e50] text-white hover:bg-[#34495e] transition-colors flex-1"
+                >
+                  Commencer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Bottom Menu (imported as a separate component) */}
       <BottomMenu />
