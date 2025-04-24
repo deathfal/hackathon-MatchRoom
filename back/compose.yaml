@@ -37,6 +37,16 @@ services:
 ###< symfony/mercure-bundle ###
 
 ###> doctrine/doctrine-bundle ###
+  php_migrations:
+    image: ${IMAGES_PREFIX:-}app-php
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-!ChangeMe!}@database:5432/${POSTGRES_DB:-app}?serverVersion=${POSTGRES_VERSION:-15}&charset=${POSTGRES_CHARSET:-utf8}
+    volumes:
+      - .:/app
+    depends_on:
+      - database
+
   database:
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     environment:
