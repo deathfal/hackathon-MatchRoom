@@ -329,8 +329,34 @@ export default function SignupCustomer() {
           </button>
         </form>
 
-        <div className="mt-6 text-center text-gray-600 relative">
+        <div className="mt-6 text-center text-gray-600 relative z-10">
           Déjà inscrit ? <Link to="/login" className="text-[#2c3e50] font-medium hover:underline">Se connecter</Link>
+        </div>
+        
+        {/* Séparateur */}
+        <div className="relative flex items-center mt-8 mb-6 z-10">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="flex-shrink mx-4 text-gray-500 text-sm">ou</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+        
+        {/* Options de connexion avec les réseaux sociaux - déplacées en bas */}
+        <div className="grid grid-cols-1 gap-3 relative z-10">
+          <button
+            type="button"
+            className="py-3 px-4 flex justify-center items-center gap-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg text-gray-700 font-medium transition-colors shadow-sm"
+          >
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="w-5 h-5" />
+            S'inscrire avec Google
+          </button>
+          
+          <button
+            type="button"
+            className="py-3 px-4 flex justify-center items-center gap-2 bg-black hover:bg-gray-900 border border-black rounded-lg text-white font-medium transition-colors shadow-sm"
+          >
+            <img src="/svg/apple.svg" alt="Apple" className="w-5 h-5" />
+            S'inscrire avec Apple
+          </button>
         </div>
       </div>
     </div>
