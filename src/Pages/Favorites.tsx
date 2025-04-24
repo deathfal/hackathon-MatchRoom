@@ -1,14 +1,30 @@
-import { Star, X } from "lucide-react"
+import { Star, X, ChevronLeft } from "lucide-react"
+import { useNavigate } from "react-router-dom"
 import BottomMenu from "../components/bottom-menu"
 
 export default function Favorites() {
+  const navigate = useNavigate()
+
+  // Handle close
+  const handleClose = () => {
+    navigate(-1)
+  }
+
   return (
     <div className="w-full bg-white min-h-screen flex flex-col">
       {/* Header */}
       <header className="bg-gray-200 p-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 md:text-3xl">VOS FAVORIS</h1>
-          <p className="text-xl text-gray-700 md:text-2xl">User 29 !</p>
+        <div className="flex items-center gap-2">
+          <button 
+            className="text-gray-700 rounded-full hover:bg-gray-100 p-1"
+            onClick={handleClose}
+          >
+            <ChevronLeft size={24} />
+          </button>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800 md:text-3xl">VOS FAVORIS</h1>
+            <p className="text-xl text-gray-700 md:text-2xl">User 29 !</p>
+          </div>
         </div>
         <div className="relative mr-16 lg:mr-15">
           <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden md:h-20 md:w-20">

@@ -5,7 +5,7 @@ import Maps from './Pages/Maps';
 import Favorites from './Pages/Favorites';
 // import Login from './Pages/Login';
 // import Preferences from './Pages/Preferences';
-// import Profil from './Pages/Profil';
+import Profil from './Pages/Profil';
 import Rewards from './Pages/Rewards';
 import SignupCustomer from './Pages/SignupCustomer';
 import SignupHotel from './Pages/SignupHotel';
@@ -20,10 +20,11 @@ function App() {
         <Route path="/maps" element={<Maps />} />
         <Route path="/favorites" element={<Favorites />} />
         <Route path="/rewards" element={<Rewards />} />
+        <Route path="/profil" element={<Profil />} />
         {/*
         <Route path="/login" element={<Login />} />
         <Route path="/preferences" element={<Preferences />} />
-        <Route path="/profil" element={<Profil />} />
+        
         */}
         <Route path="/signup-customer" element={<SignupCustomer />} />
         <Route path="/signup-hotel" element={<SignupHotel />} />

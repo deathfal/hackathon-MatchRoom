@@ -1,12 +1,11 @@
 "use client"
 
-import { useState } from "react"
-import { X, Star, ChevronLeft } from "lucide-react"
+
+import { Star, ChevronLeft } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import BottomMenu from "../components/bottom-menu"
 
 export default function RewardsPage() {
-  const [isOpen, setIsOpen] = useState(true)
   const navigate = useNavigate()
 
   // Advantages data
@@ -130,22 +129,19 @@ export default function RewardsPage() {
                 <tr>
                   <td className="px-4 py-3 text-sm text-gray-800">15/06/2024</td>
                   <td className="px-4 py-3 text-sm text-gray-800">Séjour Hôtel Paris</td>
-                  <td className="px-4 py-3 text-sm text-gray-800 text-right text-green-600">+250</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-sm text-gray-800">03/05/2024</td>
                   <td className="px-4 py-3 text-sm text-gray-800">Utilisation réduction</td>
-                  <td className="px-4 py-3 text-sm text-gray-800 text-right text-red-600">-100</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-sm text-gray-800">22/04/2024</td>
                   <td className="px-4 py-3 text-sm text-gray-800">Séjour Hôtel Lyon</td>
-                  <td className="px-4 py-3 text-sm text-gray-800 text-right text-green-600">+180</td>
                 </tr>
                 <tr>
                   <td className="px-4 py-3 text-sm text-gray-800">05/03/2024</td>
                   <td className="px-4 py-3 text-sm text-gray-800">Séjour Hôtel Marseille</td>
-                  <td className="px-4 py-3 text-sm text-gray-800 text-right text-green-600">+220</td>
+
                 </tr>
               </tbody>
             </table>
