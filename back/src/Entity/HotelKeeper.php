@@ -37,9 +37,37 @@ class HotelKeeper
     #[ORM\OneToOne(targetEntity: Hotel::class, mappedBy: 'hotelKeeper')]
     private ?Hotel $hotel = null;
 
+    #[ORM\OneToMany(mappedBy: 'receiverHotelKeeper', targetEntity: Message::class)]
+    private Collection $messages;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
+        $this->messages = new ArrayCollection();
+    }
+
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setReceiverHotelKeeper($this);
+        }
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            if ($message->getReceiverHotelKeeper() === $this) {
+                $message->setReceiverHotelKeeper(null);
+            }
+        }
+        return $this;
     }
 
     public function getId(): ?Uuid

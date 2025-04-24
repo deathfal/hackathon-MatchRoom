@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Message;
+use App\Entity\Traveler;
+use App\Entity\HotelKeeper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,9 +22,8 @@ class MessageController extends AbstractController
         $data = array_map(function (Message $message) {
             return [
                 'id' => $message->getId(),
-                'senderId' => $message->getSenderId(),
-                'receiverId' => $message->getReceiverId(),
-                'senderType' => $message->getSenderType(),
+                'senderTraveler' => $message->getSenderTraveler()?->getId(),
+                'receiverHotelKeeper' => $message->getReceiverHotelKeeper()?->getId(),
                 'message' => $message->getMessage(),
                 'sentAt' => $message->getSentAt()->format('Y-m-d H:i:s'),
             ];
@@ -36,9 +37,8 @@ class MessageController extends AbstractController
     {
         $data = [
             'id' => $message->getId(),
-            'senderId' => $message->getSenderId(),
-            'receiverId' => $message->getReceiverId(),
-            'senderType' => $message->getSenderType(),
+            'senderTraveler' => $message->getSenderTraveler()?->getId(),
+            'receiverHotelKeeper' => $message->getReceiverHotelKeeper()?->getId(),
             'message' => $message->getMessage(),
             'sentAt' => $message->getSentAt()->format('Y-m-d H:i:s'),
         ];
@@ -51,14 +51,20 @@ class MessageController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['senderId'], $data['receiverId'], $data['senderType'], $data['message'])) {
+        if (!isset($data['senderTravelerId'], $data['receiverHotelKeeperId'], $data['message'])) {
             return new JsonResponse(['error' => 'Invalid data'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
+        $senderTraveler = $entityManager->getRepository(Traveler::class)->find($data['senderTravelerId']);
+        $receiverHotelKeeper = $entityManager->getRepository(HotelKeeper::class)->find($data['receiverHotelKeeperId']);
+
+        if (!$senderTraveler || !$receiverHotelKeeper) {
+            return new JsonResponse(['error' => 'Invalid sender or receiver'], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
         $message = new Message();
-        $message->setSenderId($data['senderId']);
-        $message->setReceiverId($data['receiverId']);
-        $message->setSenderType($data['senderType']);
+        $message->setSenderTraveler($senderTraveler);
+        $message->setReceiverHotelKeeper($receiverHotelKeeper);
         $message->setMessage($data['message']);
         $message->setSentAt(new \DateTimeImmutable());
 
@@ -73,15 +79,6 @@ class MessageController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (isset($data['senderId'])) {
-            $message->setSenderId($data['senderId']);
-        }
-        if (isset($data['receiverId'])) {
-            $message->setReceiverId($data['receiverId']);
-        }
-        if (isset($data['senderType'])) {
-            $message->setSenderType($data['senderType']);
-        }
         if (isset($data['message'])) {
             $message->setMessage($data['message']);
         }

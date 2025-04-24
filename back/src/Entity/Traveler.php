@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\TravelerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
@@ -34,10 +36,14 @@ class Traveler
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'senderTraveler', targetEntity: Message::class)]
+    private Collection $messages;
+
     public function __construct()
     {
         $this->id = Uuid::v4();
         $this->createdAt = new \DateTimeImmutable();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?Uuid
@@ -114,6 +120,30 @@ class Traveler
     {
         $this->createdAt = $createdAt;
 
+        return $this;
+    }
+
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setSenderTraveler($this);
+        }
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            if ($message->getSenderTraveler() === $this) {
+                $message->setSenderTraveler(null);
+            }
+        }
         return $this;
     }
 }

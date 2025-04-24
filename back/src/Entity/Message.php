@@ -5,23 +5,24 @@ namespace App\Entity;
 use App\Repository\MessageRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: MessageRepository::class)]
 class Message
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private ?Uuid $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $senderId = null;
+    #[ORM\ManyToOne(targetEntity: Traveler::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Traveler $senderTraveler = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $receiverId = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $senderType = null;
+    #[ORM\ManyToOne(targetEntity: HotelKeeper::class)]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?HotelKeeper $receiverHotelKeeper = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $message = null;
@@ -29,44 +30,36 @@ class Message
     #[ORM\Column]
     private ?\DateTimeImmutable $sentAt = null;
 
-    public function getId(): ?int
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+        $this->sentAt = new \DateTimeImmutable();
+    }
+
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
 
-    public function getSenderId(): ?string
+    public function getSenderTraveler(): ?Traveler
     {
-        return $this->senderId;
+        return $this->senderTraveler;
     }
 
-    public function setSenderId(string $senderId): static
+    public function setSenderTraveler(?Traveler $senderTraveler): static
     {
-        $this->senderId = $senderId;
-
+        $this->senderTraveler = $senderTraveler;
         return $this;
     }
 
-    public function getReceiverId(): ?string
+    public function getReceiverHotelKeeper(): ?HotelKeeper
     {
-        return $this->receiverId;
+        return $this->receiverHotelKeeper;
     }
 
-    public function setReceiverId(string $receiverId): static
+    public function setReceiverHotelKeeper(?HotelKeeper $receiverHotelKeeper): static
     {
-        $this->receiverId = $receiverId;
-
-        return $this;
-    }
-
-    public function getSenderType(): ?string
-    {
-        return $this->senderType;
-    }
-
-    public function setSenderType(string $senderType): static
-    {
-        $this->senderType = $senderType;
-
+        $this->receiverHotelKeeper = $receiverHotelKeeper;
         return $this;
     }
 
@@ -78,7 +71,6 @@ class Message
     public function setMessage(?string $message): static
     {
         $this->message = $message;
-
         return $this;
     }
 
@@ -90,7 +82,6 @@ class Message
     public function setSentAt(\DateTimeImmutable $sentAt): static
     {
         $this->sentAt = $sentAt;
-
         return $this;
     }
 }
