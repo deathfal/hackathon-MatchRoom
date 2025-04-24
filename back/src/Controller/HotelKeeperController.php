@@ -31,15 +31,14 @@ class HotelKeeperController extends AbstractController
         $hotelKeepers = $entityManager->getRepository(HotelKeeper::class)->findAll();
 
         $data = array_map(function (HotelKeeper $hotelKeeper) {
+            $hotel = $hotelKeeper->getHotel();
             return [
                 'id' => $hotelKeeper->getId(),
                 'email' => $hotelKeeper->getEmail(),
                 'firstName' => $hotelKeeper->getFirstName(),
                 'lastName' => $hotelKeeper->getLastName(),
                 'createdAt' => $hotelKeeper->getCreatedAt()->format('Y-m-d H:i:s'),
-                'hotels' => $hotelKeeper->getHotels()->map(function ($hotel) {
-                    return $hotel->getId(); // Retourne les IDs des hôtels associés
-                })->toArray(),
+                'hotel' => $hotel ? $hotel->getId() : null,
             ];
         }, $hotelKeepers);
 
@@ -49,15 +48,14 @@ class HotelKeeperController extends AbstractController
     #[Route('/{id}', name: 'get_hotelkeeper', methods: ['GET'])]
     public function show(HotelKeeper $hotelKeeper): JsonResponse
     {
+        $hotel = $hotelKeeper->getHotel();
         $data = [
             'id' => $hotelKeeper->getId(),
             'email' => $hotelKeeper->getEmail(),
             'firstName' => $hotelKeeper->getFirstName(),
             'lastName' => $hotelKeeper->getLastName(),
             'createdAt' => $hotelKeeper->getCreatedAt()->format('Y-m-d H:i:s'),
-            'hotels' => $hotelKeeper->getHotels()->map(function ($hotel) {
-                return $hotel->getId(); // Retourne les IDs des hôtels associés
-            })->toArray(),
+            'hotel' => $hotel ? $hotel->getId() : null,
         ];
 
         return new JsonResponse($data);
