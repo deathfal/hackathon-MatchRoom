@@ -1,0 +1,424 @@
+[
+  {
+    "hotel": {
+      "name": "Sofitel Paris Le Faubourg",
+      "rooms": [
+        {
+          "averagePrice": 310,
+          "validity": true
+        },
+        {
+          "averagePrice": 350,
+          "validity": true
+        },
+        {
+          "averagePrice": 420,
+          "validity": false
+        },
+        {
+          "averagePrice": 550,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Novotel London Waterloo",
+      "rooms": [
+        {
+          "averagePrice": 190,
+          "validity": true
+        },
+        {
+          "averagePrice": 250,
+          "validity": false
+        },
+        {
+          "averagePrice": 220,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "JW Marriott Essex House New York",
+      "rooms": [
+        {
+          "averagePrice": 450,
+          "validity": true
+        },
+        {
+          "averagePrice": 500,
+          "validity": true
+        },
+        {
+          "averagePrice": 650,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The Ritz-Carlton, Tokyo",
+      "rooms": [
+        {
+          "averagePrice": 520,
+          "validity": true
+        },
+        {
+          "averagePrice": 700,
+          "validity": true
+        },
+        {
+          "averagePrice": 980,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Waldorf Astoria Amsterdam",
+      "rooms": [
+        {
+          "averagePrice": 400,
+          "validity": false
+        },
+        {
+          "averagePrice": 450,
+          "validity": true
+        },
+        {
+          "averagePrice": 650,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Conrad Maldives Rangali Island",
+      "rooms": [
+        {
+          "averagePrice": 950,
+          "validity": true
+        },
+        {
+          "averagePrice": 1200,
+          "validity": true
+        },
+        {
+          "averagePrice": 1400,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "InterContinental Dubai Marina",
+      "rooms": [
+        {
+          "averagePrice": 300,
+          "validity": true
+        },
+        {
+          "averagePrice": 340,
+          "validity": true
+        },
+        {
+          "averagePrice": 850,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The Dolder Grand",
+      "rooms": [
+        {
+          "averagePrice": 480,
+          "validity": true
+        },
+        {
+          "averagePrice": 600,
+          "validity": false
+        },
+        {
+          "averagePrice": 750,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Château Marmont",
+      "rooms": [
+        {
+          "averagePrice": 380,
+          "validity": true
+        },
+        {
+          "averagePrice": 450,
+          "validity": true
+        },
+        {
+          "averagePrice": 620,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Aman Tokyo",
+      "rooms": [
+        {
+          "averagePrice": 800,
+          "validity": true
+        },
+        {
+          "averagePrice": 950,
+          "validity": true
+        },
+        {
+          "averagePrice": 1100,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Four Seasons New York Downtown",
+      "rooms": [
+        {
+          "averagePrice": 2200,
+          "validity": false
+        },
+        {
+          "averagePrice": 1500,
+          "validity": true
+        },
+        {
+          "averagePrice": 3000,
+          "validity": true
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The St. Regis Bora Bora Resort",
+      "rooms": [
+        {
+          "averagePrice": 1500,
+          "validity": true
+        },
+        {
+          "averagePrice": 2500,
+          "validity": true
+        },
+        {
+          "averagePrice": 4000,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The Langham Chicago",
+      "rooms": [
+        {
+          "averagePrice": 400,
+          "validity": true
+        },
+        {
+          "averagePrice": 600,
+          "validity": true
+        },
+        {
+          "averagePrice": 1500,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Bulgari Hotel London",
+      "rooms": [
+        {
+          "averagePrice": 950,
+          "validity": true
+        },
+        {
+          "averagePrice": 2200,
+          "validity": true
+        },
+        {
+          "averagePrice": 3000,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Hilton Hawaiian Village",
+      "rooms": [
+        {
+          "averagePrice": 300,
+          "validity": true
+        },
+        {
+          "averagePrice": 450,
+          "validity": true
+        },
+        {
+          "averagePrice": 700,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Fairmont Banff Springs",
+      "rooms": [
+        {
+          "averagePrice": 400,
+          "validity": true
+        },
+        {
+          "averagePrice": 600,
+          "validity": true
+        },
+        {
+          "averagePrice": 1000,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Mandarin Oriental, Hong Kong",
+      "rooms": [
+        {
+          "averagePrice": 800,
+          "validity": true
+        },
+        {
+          "averagePrice": 1200,
+          "validity": true
+        },
+        {
+          "averagePrice": 2000,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Shangri-La Hotel, Singapore",
+      "rooms": [
+        {
+          "averagePrice": 350,
+          "validity": true
+        },
+        {
+          "averagePrice": 500,
+          "validity": true
+        },
+        {
+          "averagePrice": 750,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The Plaza Hotel, New York",
+      "rooms": [
+        {
+          "averagePrice": 1000,
+          "validity": true
+        },
+        {
+          "averagePrice": 1500,
+          "validity": true
+        },
+        {
+          "averagePrice": 2500,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "The Peninsula Shanghai",
+      "rooms": [
+        {
+          "averagePrice": 800,
+          "validity": true
+        },
+        {
+          "averagePrice": 1200,
+          "validity": true
+        },
+        {
+          "averagePrice": 1800,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Gstaad Palace",
+      "rooms": [
+        {
+          "averagePrice": 600,
+          "validity": true
+        },
+        {
+          "averagePrice": 900,
+          "validity": true
+        },
+        {
+          "averagePrice": 1500,
+          "validity": false
+        }
+      ]
+    }
+  },
+  {
+    "hotel": {
+      "name": "Belmond Hotel Caruso",
+      "rooms": [
+        {
+          "averagePrice": 700,
+          "validity": true
+        },
+        {
+          "averagePrice": 1000,
+          "validity": true
+        },
+        {
+          "averagePrice": 2000,
+          "validity": false
+        }
+      ]
+    }
+  }
+]
