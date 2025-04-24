@@ -4,7 +4,7 @@ import Home from './Pages/Home'
 import Maps from './Pages/Maps';
 import Favorites from './Pages/Favorites';
 // import Login from './Pages/Login';
-// import Preferences from './Pages/Preferences';
+import Preferences from './Pages/Preferences';
 import Profil from './Pages/Profil';
 import Rewards from './Pages/Rewards';
 import SignupCustomer from './Pages/SignupCustomer';
@@ -24,9 +24,10 @@ function App() {
         <Route path="/rewards" element={<Rewards />} />
         <Route path="/profil" element={<Profil />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/preferences" element={<Preferences />} />
         {/*
         <Route path="/login" element={<Login />} />
-        <Route path="/preferences" element={<Preferences />} />
+        
         
         */}
         <Route path="/signup-customer" element={<SignupCustomer />} />
