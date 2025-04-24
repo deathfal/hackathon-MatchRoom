@@ -12,6 +12,8 @@ import SignupHotel from './Pages/SignupHotel';
 import SignupType from './Pages/SignupType';
 import SignupComplete from './Pages/SignupComplete';
 import Search  from './Pages/search';
+import DashboardHotel from './Pages/DashboardHotel';
+import DashboardAdmin from './Pages/DashboardAdmin';
 
 function App() {
   return (
@@ -25,8 +27,12 @@ function App() {
         <Route path="/profil" element={<Profil />} />
         <Route path="/search" element={<Search />} />
         <Route path="/preferences" element={<Preferences />} />
+        <Route path="/dashboard-hotel" element={<DashboardHotel />} />
+        <Route path="/dashboard-admin" element={<DashboardAdmin />} />
+        
         {/*
         <Route path="/login" element={<Login />} />
+        
         
         
         */}
