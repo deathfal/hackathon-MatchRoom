@@ -33,6 +33,9 @@ class HotelKeeper
 
     #[ORM\Column(length: 20)]
     private ?string $tel = null;
+    
+    #[ORM\Column(type: 'boolean', options: ["default" => false])]
+    private bool $activated = false;
 
     #[ORM\OneToOne(targetEntity: Hotel::class, mappedBy: 'hotelKeeper')]
     private ?Hotel $hotel = null;
@@ -126,6 +129,17 @@ class HotelKeeper
     public function setTel(string $tel): static
     {
         $this->tel = $tel;
+        return $this;
+    }
+    
+    public function isActivated(): bool
+    {
+        return $this->activated;
+    }
+    
+    public function setActivated(bool $activated): static
+    {
+        $this->activated = $activated;
         return $this;
     }
 }

@@ -22,6 +22,18 @@ class Traveler
     #[ORM\Column(length: 255)]
     private ?string $passwordHash = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $status = null;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $point = 0;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pathImg = null;
+
     #[ORM\Column(length: 100)]
     private ?string $firstName = null;
 
@@ -93,14 +105,62 @@ class Traveler
         return $this;
     }
 
-    public function getTel(): ?string
+    public function getTel(): ?int
     {
         return $this->tel;
     }
 
-    public function setTel(string $tel): static
+    public function setTel(?int $tel): static
     {
         $this->tel = $tel;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(?string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    public function getPoint(): ?int
+    {
+        return $this->point;
+    }
+
+    public function setPoint(?int $point): static
+    {
+        $this->point = $point;
+
+        return $this;
+    }
+
+    public function getPathImg(): ?string
+    {
+        return $this->pathImg;
+    }
+
+    public function setPathImg(?string $pathImg): static
+    {
+        $this->pathImg = $pathImg;
 
         return $this;
     }
