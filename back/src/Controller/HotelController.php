@@ -23,9 +23,7 @@ class HotelController extends AbstractController
                 'name' => $hotel->getName(),
                 'description' => $hotel->getDescription(),
                 'location' => $hotel->getLocation(),
-                'hotelKeepers' => $hotel->getHotelKeepers()->map(function ($hotelKeeper) {
-                    return $hotelKeeper->getId(); // Retourne les IDs des HotelKeepers associés
-                })->toArray(),
+                'hotelKeeper' => $hotel->getHotelKeeper() ? $hotel->getHotelKeeper()->getId() : null,
             ];
         }, $hotels);
 
@@ -40,9 +38,7 @@ class HotelController extends AbstractController
             'name' => $hotel->getName(),
             'description' => $hotel->getDescription(),
             'location' => $hotel->getLocation(),
-            'hotelKeepers' => $hotel->getHotelKeepers()->map(function ($hotelKeeper) {
-                return $hotelKeeper->getId(); // Retourne les IDs des HotelKeepers associés
-            })->toArray(),
+            'hotelKeeper' => $hotel->getHotelKeeper() ? $hotel->getHotelKeeper()->getId() : null,
         ];
 
         return new JsonResponse($data);

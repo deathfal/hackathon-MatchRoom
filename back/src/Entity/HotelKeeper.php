@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\HotelKeeperRepository;
+use App\Entity\Hotel;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -30,13 +31,14 @@ class HotelKeeper
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Hotel::class, inversedBy: 'hotelKeepers')]
-    private Collection $hotels;
+    #[ORM\Column(length: 20)]
+    private ?string $tel = null;
+
+    #[ORM\OneToOne(targetEntity: Hotel::class, mappedBy: 'hotelKeeper')]
+    private ?Hotel $hotel = null;
 
     public function __construct()
-    {
-        $this->hotels = new ArrayCollection();
-    }
+    {}
 
     public function getId(): ?int
     {
@@ -98,25 +100,30 @@ class HotelKeeper
         return $this;
     }
 
-    public function getHotels(): Collection
+    public function getHotel(): ?Hotel
     {
-        return $this->hotels;
+        return $this->hotel;
     }
 
-    public function addHotel(Hotel $hotel): static
+    public function setHotel(?Hotel $hotel): static
     {
-        if (!$this->hotels->contains($hotel)) {
-            $this->hotels->add($hotel);
-            $hotel->addHotelKeeper($this);
+        // Set the owning side of the relation if necessary
+        if ($hotel !== null && $hotel->getHotelKeeper() !== $this) {
+            $hotel->setHotelKeeper($this);
         }
+
+        $this->hotel = $hotel;
         return $this;
     }
 
-    public function removeHotel(Hotel $hotel): static
+    public function getTel(): ?string
     {
-        if ($this->hotels->removeElement($hotel)) {
-            $hotel->removeHotelKeeper($this);
-        }
+        return $this->tel;
+    }
+
+    public function setTel(string $tel): static
+    {
+        $this->tel = $tel;
         return $this;
     }
 }

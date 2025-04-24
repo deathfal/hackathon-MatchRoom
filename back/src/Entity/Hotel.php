@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HotelRepository;
+use App\Entity\HotelGroup;
+use App\Entity\HotelKeeper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -25,13 +27,15 @@ class Hotel
     #[ORM\Column(length: 255)]
     private ?string $location = null;
 
-    #[ORM\ManyToMany(targetEntity: HotelKeeper::class, mappedBy: 'hotels')]
-    private Collection $hotelKeepers;
+    #[ORM\ManyToOne(targetEntity: HotelGroup::class)]
+    private ?HotelGroup $hotelGroup = null;
+
+    #[ORM\OneToOne(targetEntity: HotelKeeper::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?HotelKeeper $hotelKeeper = null;
 
     public function __construct()
-    {
-        $this->hotelKeepers = new ArrayCollection();
-    }
+    {}
 
     public function getId(): ?int
     {
@@ -71,25 +75,25 @@ class Hotel
         return $this;
     }
 
-    public function getHotelKeepers(): Collection
+    public function getHotelKeeper(): ?HotelKeeper
     {
-        return $this->hotelKeepers;
+        return $this->hotelKeeper;
     }
 
-    public function addHotelKeeper(HotelKeeper $hotelKeeper): static
+    public function setHotelKeeper(?HotelKeeper $hotelKeeper): static
     {
-        if (!$this->hotelKeepers->contains($hotelKeeper)) {
-            $this->hotelKeepers->add($hotelKeeper);
-            $hotelKeeper->addHotel($this);
-        }
+        $this->hotelKeeper = $hotelKeeper;
         return $this;
     }
 
-    public function removeHotelKeeper(HotelKeeper $hotelKeeper): static
+    public function getHotelGroup(): ?HotelGroup
     {
-        if ($this->hotelKeepers->removeElement($hotelKeeper)) {
-            $hotelKeeper->removeHotel($this);
-        }
+        return $this->hotelGroup;
+    }
+
+    public function setHotelGroup(?HotelGroup $hotelGroup): static
+    {
+        $this->hotelGroup = $hotelGroup;
         return $this;
     }
 }
