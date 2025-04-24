@@ -1,107 +1,111 @@
-"use client"
+import BottomMenu from "../components/bottom-menu"
 
-import { useState } from "react"
-import { Search, Bell } from "lucide-react"
-
-export default function SketchRoom() {
-  const [searchQuery, setSearchQuery] = useState("")
-
-  // Données des réservations d'hôtel
-  const reservations = [
-    { id: 1, name: "Hôtel X, chambre Y" },
-    { id: 2, name: "Hôtel X, chambre Y" },
-    { id: 3, name: "Hôtel X, chambre Y" },
-    { id: 4, name: "Hôtel X, chambre Y" },
-  ]
-
+export default function Home() {
   return (
-    <div className="max-w-md mx-auto bg-white min-h-screen flex flex-col md:max-w-3xl lg:max-w-4xl">
-      {/* Header with logo and search */}
-      <header className="p-4 flex items-center justify-between">
-        <div className="flex items-center">
-          <div className="bg-blue-900 rounded-full p-2 mr-1">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 6L7 12H17L12 6Z" fill="white" />
-              <path
-                d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z"
-                stroke="white"
-                strokeWidth="2"
-              />
+    <div className="w-full bg-white min-h-screen flex flex-col">
+      {/* Header */}
+      <header className="bg-gray-200 p-4 flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-800 md:text-3xl">BIENVENUE</h1>
+          <p className="text-xl text-gray-700 md:text-2xl">User 29 !</p>
+        </div>
+        <div className="relative">
+          <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden md:h-20 md:w-20">
+            <img
+              src="/placeholder.svg?height=64&width=64"
+              alt="Profile"
+              className="object-cover h-full w-full"
+            />
+          </div>
+          <div className="absolute bottom-0 right-0 bg-yellow-400 rounded-full p-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-black"
+            >
+              <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path>
             </svg>
           </div>
-          <span className="font-bold text-lg">SketchRoom</span>
-        </div>
-        <div className="relative flex-1 max-w-xs mx-4">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-1"
-            placeholder="Rechercher..."
-          />
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2">
-            <Search size={18} />
-          </button>
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="flex-1 p-4">
-        {/* Welcome message */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold uppercase">BIENVENUE</h1>
-          <p className="text-xl">User 29 !</p>
-        </div>
-
-        {/* Reservations */}
-        <div className="mb-8">
-          <h2 className="text-xl font-medium mb-4">Mes réservations</h2>
-
-          {/* Horizontal scrollable reservations */}
-          <div className="flex overflow-x-auto pb-4 gap-4 hide-scrollbar">
-            {reservations.map((reservation) => (
-              <div
-                key={reservation.id}
-                className="flex-shrink-0 w-40 border border-gray-200 rounded-md overflow-hidden"
-              >
-                <div className="relative">
-                  <img src="/placeholder.svg?height=100&width=160" alt="Hotel" className="w-full h-24 object-cover" />
-                  <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-80 p-1">
-                    <p className="text-xs">{reservation.name}</p>
-                  </div>
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
+        {/* Reservations Section */}
+        <section className="mb-6 md:mb-10">
+          <div className="bg-purple-600 text-white px-3 py-1 inline-block mb-3 md:px-4 md:py-2">
+            <h2 className="text-lg font-medium md:text-xl">Mes réservations</h2>
+          </div>
+          <div className="flex gap-3 md:gap-4 lg:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory">
+            {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+              <div key={item} className="min-w-[160px] md:min-w-[220px] lg:min-w-[260px] xl:min-w-[300px] flex-shrink-0 snap-center rounded-lg overflow-hidden border border-gray-300">
+                <div className="relative h-24 md:h-32 lg:h-40">
+                  <img
+                    src="/placeholder.svg?height=96&width=160"
+                    alt="Hôtel"
+                    className="object-cover h-full w-full"
+                  />
+                  <div className="absolute top-2 left-2 bg-white/80 text-xs px-1 rounded md:text-sm md:px-2">6:01 - 08:01</div>
+                </div>
+                <div className="p-2 text-sm md:p-3 md:text-base">
+                  <p>Hôtel X, chambre Y</p>
                 </div>
               </div>
             ))}
           </div>
+        </section>
 
-          {/* Input field */}
-          <div className="mt-8 mb-6 flex items-center">
-            <input
-              type="text"
-              className="w-full md:w-64 border border-gray-300 rounded px-3 py-2"
-              placeholder="Message..."
-            />
-            <div className="ml-4">
-              <div className="w-10 h-10 rounded-full border border-gray-300"></div>
+        {/* Negotiations Section */}
+        <section className="mb-6 md:mb-10">
+          <h2 className="text-xl font-medium text-gray-800 mb-3 md:text-2xl">Mes négociations</h2>
+          <div className="space-y-3 w-full">
+            <div className="bg-yellow-300 rounded-full py-2 px-4 flex justify-between items-center md:py-3 md:px-6">
+              <span className="md:text-lg">Hôtel XX - proposition $$</span>
+              <span className="text-green-600 md:text-lg">✓</span>
             </div>
+            {[1, 2].map((item) => (
+              <div
+                key={item}
+                className="bg-gray-800 text-white rounded-full py-2 px-4 flex justify-between items-center"
+              >
+                <span>Hôtel XX - proposition $$</span>
+                <span>•••</span>
+              </div>
+            ))}
           </div>
-        </div>
+        </section>
+
+        {/* Suggestions Section */}
+        <section className="mb-20 md:mb-16">
+          <h2 className="text-xl font-medium text-gray-800 mb-3 md:text-2xl">Suggestions</h2>
+          <div className="flex gap-3 md:gap-4 lg:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory">
+            {[1, 2, 3, 4, 5, 6, 7].map((item) => (
+              <div key={item} className="min-w-[160px] md:min-w-[220px] lg:min-w-[260px] xl:min-w-[300px] flex-shrink-0 snap-center rounded-lg overflow-hidden border border-gray-300">
+                <div className="relative h-24 md:h-32 lg:h-40">
+                  <img
+                    src="/placeholder.svg?height=96&width=160"
+                    alt="Hôtel"
+                    className="object-cover h-full w-full"
+                  />
+                </div>
+                <div className="p-2 text-sm md:p-3 md:text-base">
+                  <p>Hôtel X</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
       </main>
 
-      {/* Footer */}
-      <footer className="p-4 border-t border-gray-200">
-        <div className="flex justify-between items-center">
-          <div></div>
-          <div className="flex items-center">
-            <div className="bg-yellow-300 rounded-full p-2 mr-4">
-              <Bell size={20} />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
-              <img src="/placeholder.svg?height=40&width=40" alt="Profile" className="w-full h-full object-cover" />
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* Bottom Menu (imported as a separate component) */}
+      <BottomMenu />
     </div>
   )
 }
