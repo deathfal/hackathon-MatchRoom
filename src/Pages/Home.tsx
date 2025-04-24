@@ -1,27 +1,38 @@
 import { useState, useEffect } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import BottomMenu from "../components/bottom-menu"
-import { X, AlertCircle } from "lucide-react"
+import { X, Check, Clock, Sparkles, Award, Lightbulb, ChevronRight } from "lucide-react"
 
 export default function Home() {
   const location = useLocation()
   const navigate = useNavigate()
   const [showQuestionnairePopup, setShowQuestionnairePopup] = useState(false)
+  const [popupAnimation, setPopupAnimation] = useState(false)
 
   // Vérifier si l'utilisateur vient de terminer son inscription
   useEffect(() => {
     // Détection du paramètre de redirection depuis la page de confirmation d'inscription
     if (location.state?.fromSignupComplete) {
       setShowQuestionnairePopup(true)
+      setTimeout(() => {
+        setPopupAnimation(true)
+      }, 100)
     }
   }, [location])
 
   const handleStartQuestionnaire = () => {
-    navigate("/questionnaire")
+    setPopupAnimation(false)
+    setTimeout(() => {
+      setShowQuestionnairePopup(false)
+      navigate("/questionnaire")
+    }, 300)
   }
 
   const handleDismissPopup = () => {
-    setShowQuestionnairePopup(false)
+    setPopupAnimation(false)
+    setTimeout(() => {
+      setShowQuestionnairePopup(false)
+    }, 300)
   }
 
   return (
@@ -129,47 +140,77 @@ export default function Home() {
 
       {/* Popup pour le questionnaire */}
       {showQuestionnairePopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden">
-            <div className="bg-[#2c3e50] text-white p-4 flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <AlertCircle size={20} />
-                <h3 className="text-lg font-medium">Personnaliser votre expérience</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm transition-all duration-300 bg-black/40">
+          <div 
+            className={`bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-2xl max-w-md w-full overflow-hidden transform transition-all duration-300 ${popupAnimation ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}
+          >
+            {/* Header avec image de fond et dégradé */}
+            <div className="relative">
+              <div 
+                className="h-32 bg-cover bg-center" 
+                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=1000')" }}
+              ></div>
+              <div className="absolute inset-0 bg-gradient-to-b from-[#2c3e50]/80 to-[#34495e]/90 flex items-end p-6">
+                <h3 className="text-2xl font-bold text-white">Personnalisez votre expérience</h3>
               </div>
               <button 
                 onClick={handleDismissPopup}
-                className="rounded-full hover:bg-white/20 p-1 transition-colors"
+                className="absolute top-4 right-4 rounded-full bg-white/20 hover:bg-white/40 p-1.5 transition-all duration-300 text-white"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
             
-            <div className="p-5">
-              <p className="mb-4">
-                Pour vous proposer des hôtels qui correspondent parfaitement à vos préférences, nous avons préparé un questionnaire rapide.
+            <div className="p-6">
+              <p className="text-gray-700 mb-6 font-medium">
+                Notre questionnaire rapide nous permettra de vous proposer des hôtels parfaitement adaptés à vos préférences et à votre style de voyage.
               </p>
               
-              <div className="mb-5 bg-blue-50 p-3 rounded-lg">
-                <ul className="text-sm list-disc pl-5 space-y-1">
-                  <li>10 questions rapides (moins de 2 minutes)</li>
-                  <li>Des suggestions d'hôtels personnalisées</li>
-                  <li>Des offres adaptées à vos préférences</li>
-                  <li>Une meilleure expérience utilisateur</li>
-                </ul>
+              <div className="space-y-4 mb-6">
+                <div className="flex items-start gap-4 p-3 rounded-lg bg-gradient-to-r from-blue-50 to-cyan-50">
+                  <div className="bg-[#34495e] rounded-full p-2 text-white mt-1 flex-shrink-0">
+                    <Clock size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#2c3e50]">Rapide & simple</h4>
+                    <p className="text-sm text-gray-600">10 questions seulement, moins de 2 minutes</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4 p-3 rounded-lg bg-gradient-to-r from-purple-50 to-indigo-50">
+                  <div className="bg-[#34495e] rounded-full p-2 text-white mt-1 flex-shrink-0">
+                    <Sparkles size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#2c3e50]">Personnalisé pour vous</h4>
+                    <p className="text-sm text-gray-600">Des suggestions qui vous correspondent vraiment</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-4 p-3 rounded-lg bg-gradient-to-r from-amber-50 to-yellow-50">
+                  <div className="bg-[#34495e] rounded-full p-2 text-white mt-1 flex-shrink-0">
+                    <Award size={18} />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-[#2c3e50]">Offres sur mesure</h4>
+                    <p className="text-sm text-gray-600">Des expériences adaptées à vos préférences</p>
+                  </div>
+                </div>
               </div>
               
-              <div className="flex justify-between gap-3">
+              <div className="flex gap-4 mt-6">
                 <button
                   onClick={handleDismissPopup}
-                  className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors flex-1"
+                  className="px-5 py-3 rounded-xl text-gray-700 font-medium hover:bg-gray-100 transition-colors flex-1 border border-gray-200"
                 >
                   Plus tard
                 </button>
                 <button
                   onClick={handleStartQuestionnaire}
-                  className="px-4 py-2 rounded-lg bg-[#2c3e50] text-white hover:bg-[#34495e] transition-colors flex-1"
+                  className="px-5 py-3 rounded-xl bg-gradient-to-r from-[#2c3e50] to-[#34495e] text-white font-medium hover:from-[#34495e] hover:to-[#3d566e] transition-all shadow-md hover:shadow-lg flex-1 flex items-center justify-center gap-2"
                 >
-                  Commencer
+                  <span>Commencer</span>
+                  <ChevronRight size={18} />
                 </button>
               </div>
             </div>
