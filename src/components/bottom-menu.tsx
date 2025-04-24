@@ -2,21 +2,36 @@
 
 import { useState } from "react"
 import { Heart, Search, Home, Bell, User } from "lucide-react"
+import { useNavigate, useLocation } from "react-router-dom"
 
 export default function BottomMenu() {
-  const [activeTab, setActiveTab] = useState("home")
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+  // Déterminer l'onglet actif en fonction de l'URL actuelle
+  const getActiveTab = () => {
+    const path = location.pathname
+    if (path === "/favorites") return "favorites"
+    if (path === "/maps" || path === "/search") return "search"
+    if (path === "/") return "home"
+    if (path === "/notifications") return "notifications"
+    if (path === "/profil" || path === "/profile") return "profile"
+    return "home"
+  }
+  
+  const [activeTab, setActiveTab] = useState(getActiveTab())
 
   const menuItems = [
-    { id: "favorites", icon: Heart, label: "Favoris" },
-    { id: "search", icon: Search, label: "Recherche" },
-    { id: "home", icon: Home, label: "Accueil" },
-    { id: "notifications", icon: Bell, label: "Notifications" },
-    { id: "profile", icon: User, label: "Profil" },
+    { id: "favorites", icon: Heart, label: "Favoris", path: "/favorites" },
+    { id: "search", icon: Search, label: "Recherche", path: "/maps" },
+    { id: "home", icon: Home, label: "Accueil", path: "/" },
+    { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
+    { id: "profile", icon: User, label: "Profil", path: "/profil" },
   ]
 
-  const handleTabClick = (tabId: string) => {
+  const handleTabClick = (tabId: string, path: string) => {
     setActiveTab(tabId)
-    // Ici vous pouvez ajouter la logique de navigation si nécessaire
+    navigate(path) // Redirection vers la page correspondante
   }
 
   return (
@@ -27,7 +42,7 @@ export default function BottomMenu() {
           return (
             <button 
               key={item.id} 
-              onClick={() => handleTabClick(item.id)} 
+              onClick={() => handleTabClick(item.id, item.path)} 
               className="flex flex-col items-center bg-transparent border-0 cursor-pointer"
             >
               <div
