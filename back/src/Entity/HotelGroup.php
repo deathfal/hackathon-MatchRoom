@@ -5,14 +5,19 @@ namespace App\Entity;
 use App\Repository\HotelGroupRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: HotelGroupRepository::class)]
 class HotelGroup
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'uuid', unique: true)]
+    private ?Uuid $id = null;
+
+    public function __construct()
+    {
+        $this->id = Uuid::v4();
+    }
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -23,7 +28,7 @@ class HotelGroup
     #[ORM\Column(type: Types::TEXT)]
     private ?string $logoUrl = null;
 
-    public function getId(): ?int
+    public function getId(): ?Uuid
     {
         return $this->id;
     }
