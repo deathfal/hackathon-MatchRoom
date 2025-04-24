@@ -6,15 +6,25 @@ use App\Entity\HotelKeeper;
 use App\Entity\Hotel;
 use App\Entity\HotelGroup;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 #[Route('/api/hotelkeepers')]
 class HotelKeeperController extends AbstractController
 {
+    private JWTTokenManagerInterface $jwtManager;
+    private UserPasswordHasherInterface $passwordHasher;
+    
+    public function __construct(JWTTokenManagerInterface $jwtManager, UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->jwtManager = $jwtManager;
+        $this->passwordHasher = $passwordHasher;
+    }
     #[Route('/', name: 'get_hotelkeepers', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
@@ -104,8 +114,8 @@ class HotelKeeperController extends AbstractController
         $hotelKeeper->setCreatedAt(new \DateTimeImmutable());
         $hotelKeeper->setActivated(false); // Default is false, but setting explicitly for clarity
 
-        // Hash password manually
-        $hashedPassword = password_hash($data['hotelKeeper']['password'], PASSWORD_BCRYPT);
+        // Hash password using Symfony's password hasher
+        $hashedPassword = $this->passwordHasher->hashPassword($hotelKeeper, $data['hotelKeeper']['password']);
         $hotelKeeper->setPasswordHash($hashedPassword);
 
         // Set optional fields if provided
@@ -151,11 +161,23 @@ class HotelKeeperController extends AbstractController
         $entityManager->persist($hotelKeeper);
         $entityManager->persist($hotel);
         $entityManager->flush();
+        
+        // Generate JWT token
+        $token = $this->jwtManager->create($hotelKeeper);
 
         return new JsonResponse([
-            'message' => 'Registration successful',
+            'message' => 'Registration successful. Your account will be activated by an admin.',
             'hotelKeeperId' => $hotelKeeper->getId(),
             'hotelId' => $hotel->getId(),
+            'token' => $token,
+            'user' => [
+                'id' => $hotelKeeper->getId(),
+                'email' => $hotelKeeper->getEmail(),
+                'firstName' => $hotelKeeper->getFirstName(),
+                'lastName' => $hotelKeeper->getLastName(),
+                'activated' => $hotelKeeper->isActivated(),
+                'roles' => $hotelKeeper->getRoles()
+            ],
             'activated' => false // Indicate account needs approval
         ], JsonResponse::HTTP_CREATED);
     }

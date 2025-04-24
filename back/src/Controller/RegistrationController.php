@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\TravelerRegistrationRequest;
 use App\Service\TravelerRegistrationService;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,7 +16,8 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class RegistrationController extends AbstractController
 {
     public function __construct(
-        private readonly TravelerRegistrationService $registrationService
+        private readonly TravelerRegistrationService $registrationService,
+        private readonly JWTTokenManagerInterface $jwtManager
     ) {
     }
 
@@ -38,10 +40,21 @@ class RegistrationController extends AbstractController
             // Register the traveler
             $traveler = $this->registrationService->register($registrationRequest);
 
-            // Return success response
+            // Generate JWT token
+            $token = $this->jwtManager->create($traveler);
+
+            // Return success response with token
             return new JsonResponse([
                 'message' => 'Traveler registered successfully',
-                'id' => $traveler->getId()
+                'id' => $traveler->getId(),
+                'token' => $token,
+                'user' => [
+                    'id' => $traveler->getId(),
+                    'email' => $traveler->getEmail(),
+                    'firstName' => $traveler->getFirstName(),
+                    'lastName' => $traveler->getLastName(),
+                    'roles' => $traveler->getRoles()
+                ]
             ], Response::HTTP_CREATED);
 
         } catch (\RuntimeException $e) {
@@ -50,7 +63,7 @@ class RegistrationController extends AbstractController
             ], Response::HTTP_CONFLICT);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'error' => 'An unexpected error occurred'
+                'error' => 'An unexpected error occurred: ' . $e->getMessage()
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
