@@ -29,8 +29,15 @@ final class Version20250424133922 extends AbstractMigration
         $this->addSql(<<<'SQL'
             ALTER TABLE admin ALTER id DROP DEFAULT
         SQL);
+        // Check if index exists before dropping it
         $this->addSql(<<<'SQL'
-            DROP INDEX IDX_3535ED9C5353641
+            DO $$
+            BEGIN
+                IF EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'idx_3535ed9c5353641') THEN
+                    DROP INDEX IDX_3535ED9C5353641;
+                END IF;
+            END
+            $$;
         SQL);
         $this->addSql(<<<'SQL'
             ALTER TABLE hotel ADD city VARCHAR(255) DEFAULT NULL
