@@ -10,7 +10,6 @@ export default function BottomMenu() {
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   
-  // Déterminer l'onglet actif en fonction de l'URL actuelle
   const getActiveTab = () => {
     const path = location.pathname
     if (path === "/favorites") return "favorites"
@@ -25,7 +24,7 @@ export default function BottomMenu() {
 
   const menuItems = [
     { id: "favorites", icon: Heart, label: "Favoris", path: "/favorites" },
-    { id: "search", icon: Search, label: "Recherche", path: "/maps" },
+    { id: "search", icon: Search, label: "Recherche", path: "/search" },
     { id: "home", icon: Home, label: "Accueil", path: "/" },
     { id: "notifications", icon: Bell, label: "Notifications", path: "/notifications" },
     { id: "profile", icon: User, label: "Profil", path: "/profil" },
@@ -33,18 +32,18 @@ export default function BottomMenu() {
 
   const handleTabClick = (tabId: string, path: string) => {
     setActiveTab(tabId)
-    navigate(path) // Redirection vers la page correspondante
+    navigate(path)
     if (isDesktop) {
-      setIsMenuOpen(false) // Ferme le menu après avoir cliqué sur un élément (sur desktop)
+      setIsMenuOpen(false)
     }
   }
 
-  // Basculer l'état du menu
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
 
-  // Détecter les changements de taille d'écran
+
   useEffect(() => {
     const handleResize = () => {
       setIsDesktop(window.innerWidth >= 1024);
@@ -54,7 +53,7 @@ export default function BottomMenu() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Fermer le menu si on clique en dehors
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const menuElement = document.getElementById('desktop-menu');
@@ -77,11 +76,11 @@ export default function BottomMenu() {
     };
   }, [isMenuOpen]);
 
-  // Menu desktop (latéral)
+
   if (isDesktop) {
     return (
       <>
-        {/* Bouton pour ouvrir le menu */}
+
         <button 
           id="menu-toggle-button"
           onClick={toggleMenu} 
@@ -90,16 +89,14 @@ export default function BottomMenu() {
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        
-        {/* Overlay semi-transparent pour assombrir légèrement le fond */}
+
         {isMenuOpen && (
           <div 
             className="fixed inset-0 bg-gray-600/30 backdrop-blur-sm z-20 transition-opacity duration-300"
             onClick={() => setIsMenuOpen(false)}
           />
         )}
-        
-        {/* Menu latéral à droite */}
+
         <div 
           id="desktop-menu"
           className={`
@@ -171,7 +168,6 @@ export default function BottomMenu() {
     );
   }
 
-  // Menu mobile (en bas)
   return (
     <div className="fixed bottom-0 left-0 right-0 w-full bg-gray-100 border-t">
       <div className="flex justify-around items-center py-2 max-w-screen-2xl mx-auto">
