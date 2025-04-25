@@ -14,6 +14,9 @@ import Search  from './Pages/Search';
 import DashboardHotel from './Pages/DashboardHotel';
 import DashboardAdmin from './Pages/DashboardAdmin';
 import Login from './Pages/Login';
+import Negociation from './Pages/Negociation';
+import Settings from './Pages/Settings';
+import Room from './Pages/room';
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
         <Route path="/signup-type" element={<SignupType />} />
         <Route path="/signup-complete" element={<SignupComplete />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/negociation" element={<Negociation />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/room" element={<Room />} />
       </Routes>
     </div>
   )

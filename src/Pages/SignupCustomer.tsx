@@ -18,6 +18,7 @@ export default function SignupCustomer() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,7 +64,7 @@ export default function SignupCustomer() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -71,13 +72,42 @@ export default function SignupCustomer() {
     }
     
     setIsSubmitting(true);
+    setApiError(null);
     
-    setTimeout(() => {
-      console.log("Form submitted:", formState);
-      setIsSubmitting(false);
+    try {
+      // Prepare data for the API
+      const userData = {
+        email: formState.email,
+        password: formState.password,
+        firstName: formState.firstName,
+        lastName: formState.lastName
+        // Note: city and phone are not included in the backend DTO
+        // You can extend the backend to include these fields if needed
+      };
+
+      // Make API call to backend
+      const response = await fetch('https://localhost:444/api/register/traveler', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
       
-      navigate("/signup-complete");
-    }, 1500);
+      if (!response.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+      
+      console.log('Registration successful:', data);
+      navigate('/signup-complete');
+    } catch (error) {
+      console.error('Registration error:', error);
+      setApiError(error instanceof Error ? error.message : 'An unexpected error occurred');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -304,6 +334,13 @@ export default function SignupCustomer() {
               </label>
             </div>
           </div>
+
+          {/* Display API error if any */}
+          {apiError && (
+            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+              {apiError}
+            </div>
+          )}
 
           {/* Bouton de soumission */}
           <button

@@ -48,7 +48,7 @@ export default function HotelSearchPage() {
   const [activePhotoIndex, setActivePhotoIndex] = useState(0)
   const [isFavorite, setIsFavorite] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
-
+  const [showMap, setShowMap] = useState(true);
   const controls = useAnimation()
   const searchRef = useRef(null)
   const isInView = useInView(searchRef, { once: true })
@@ -167,7 +167,7 @@ export default function HotelSearchPage() {
     }, 1000)
   }
 
-  const handleSelectHotel = () => {
+  const handleSelectHotel = (hotelId = 1) => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
@@ -201,19 +201,16 @@ export default function HotelSearchPage() {
     )
   }
 
-  // Toggle favorite
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsFavorite(!isFavorite)
   }
 
-  // Animation pour les filtres
   const filterVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 25 } }
   }
 
-  // Liste pour les résultats d'hôtels
   const hotelsList = [
     { id: 1, name: "Hôtel Splendid", rating: 4.5, price: 120, distance: 0.8, promotion: true, image: DEFAULT_HOTEL_IMAGE, services: ["wifi", "parking", "piscine"] },
     { id: 2, name: "Grand Hôtel", rating: 4.2, price: 95, distance: 1.2, promotion: false, image: DEFAULT_HOTEL_IMAGE+"&sig=1", services: ["wifi", "restaurant"] },
@@ -221,7 +218,6 @@ export default function HotelSearchPage() {
     { id: 4, name: "Résidence du Port", rating: 3.9, price: 80, distance: 1.5, promotion: false, image: DEFAULT_HOTEL_IMAGE+"&sig=3", services: ["wifi", "parking"] },
   ]
 
-  // Services icons mapping
   const serviceIcons: Record<string, JSX.Element> = {
     wifi: <Wifi size={16} className="mr-1" />,
     parking: <MapPin size={16} className="mr-1" />,
@@ -230,11 +226,9 @@ export default function HotelSearchPage() {
     spa: <Palmtree size={16} className="mr-1" />
   }
 
-  // Fonctions de rendu pour chaque écran
   const renderSearchForm = () => {
     return (
       <div className="flex flex-col h-full relative">
-        {/* Header avec gradient et animation de particules */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -291,7 +285,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10"
+            className="relative z-10 mr-0 md:mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-xl md:h-18 md:w-18">
               <img
@@ -310,7 +304,6 @@ export default function HotelSearchPage() {
           </motion.div>
         </motion.header>
 
-        {/* Search Form with improved animations */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -319,7 +312,6 @@ export default function HotelSearchPage() {
           className="flex-1 p-6 md:p-8 lg:p-10 overflow-y-auto relative"
           ref={searchRef}
         >
-          {/* Animated Welcome Message */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -330,7 +322,6 @@ export default function HotelSearchPage() {
             <p className="text-gray-500 mt-1">Remplissez le formulaire ci-dessous pour trouver votre hôtel parfait</p>
           </motion.div>
 
-          {/* Search Bar with animated focus effect */}
           <motion.div 
             variants={itemVariants}
             custom={0}
@@ -356,7 +347,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.div>
 
-          {/* Date Inputs with improved design */}
           <motion.section 
             variants={itemVariants}
             custom={1}
@@ -400,7 +390,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* Location Input with animation */}
           <motion.section 
             variants={itemVariants}
             custom={2}
@@ -427,7 +416,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* Accommodation Type with new design */}
           <motion.section 
             variants={itemVariants}
             custom={3}
@@ -509,7 +497,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* People and Room Dropdowns with animations */}
           <motion.section 
             variants={itemVariants}
             custom={4}
@@ -539,13 +526,15 @@ export default function HotelSearchPage() {
                       <Users size={18} className={`mr-2 ${expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}`} />
                       <span>{searchForm.people.adults} adulte(s), {searchForm.people.children} enfant(s)</span>
                     </div>
-                    <motion.span 
-                      animate={{ rotate: expandedDropdown === "people" ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}
-                    >
-                      ▼
-                    </motion.span>
+                    <div className="flex items-center space-x-3">
+                      <motion.span 
+                        animate={{ rotate: expandedDropdown === "people" ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}
+                      >
+                        ▼
+                      </motion.span>
+                    </div>
                   </motion.button>
 
                   <AnimatePresence>
@@ -626,13 +615,15 @@ export default function HotelSearchPage() {
                       <Home size={18} className={`mr-2 ${expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}`} />
                       <span>{searchForm.rooms} chambre(s)</span>
                     </div>
-                    <motion.span 
-                      animate={{ rotate: expandedDropdown === "rooms" ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}
-                    >
-                      ▼
-                    </motion.span>
+                    <div className="flex items-center space-x-3">
+                      <motion.span 
+                        animate={{ rotate: expandedDropdown === "rooms" ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}
+                      >
+                        ▼
+                      </motion.span>
+                    </div>
                   </motion.button>
 
                   <AnimatePresence>
@@ -675,7 +666,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
           
-          {/* Filter tags with animations */}
           <motion.section 
             variants={itemVariants}
             custom={5}
@@ -740,7 +730,6 @@ export default function HotelSearchPage() {
             </AnimatePresence>
           </motion.section>
           
-          {/* Services with hover effects */}
           <motion.section 
             variants={itemVariants}
             custom={6}
@@ -785,7 +774,6 @@ export default function HotelSearchPage() {
           </motion.section>
         </motion.main>
 
-        {/* Footer with floating action button */}
         <motion.footer
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -827,7 +815,6 @@ export default function HotelSearchPage() {
   const renderSearchResults = () => {
     return (
       <div className="flex flex-col h-full">
-        {/* Header avec gradient avancé et animations */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -884,7 +871,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10"
+            className="relative z-10 mr-0 md:mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-lg md:h-18 md:w-18">
               <img
@@ -896,14 +883,13 @@ export default function HotelSearchPage() {
             <motion.div 
               whileHover={{ scale: 1.1, rotate: 10 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full p-1.5 shadow-md"
+              className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full p-1.5 shadow-md"
             >
               <Sparkles size={16} className="text-white" />
             </motion.div>
           </motion.div>
         </motion.header>
 
-        {/* Barre de recherche flottante pour filtrer */}
         <div className="sticky top-0 z-20 bg-white px-4 py-3 shadow-md border-b border-gray-100">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
@@ -927,7 +913,6 @@ export default function HotelSearchPage() {
           </motion.div>
         </div>
 
-        {/* Results Content with animations */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -935,7 +920,6 @@ export default function HotelSearchPage() {
           exit="exit"
           className="flex-1 p-5 md:p-6 lg:p-8 overflow-y-auto"
         >
-          {/* Filter Pills */}
           <motion.div 
             variants={itemVariants}
             custom={0}
@@ -964,7 +948,6 @@ export default function HotelSearchPage() {
             ))}
           </motion.div>
 
-          {/* Quick Filters */}
           <motion.div 
             variants={itemVariants}
             custom={1}
@@ -1006,7 +989,6 @@ export default function HotelSearchPage() {
             </motion.div>
           </motion.div>
 
-          {/* Hotel Results Cards */}
           <motion.section 
             variants={itemVariants}
             custom={2}
@@ -1136,19 +1118,6 @@ export default function HotelSearchPage() {
           </motion.section>
         </motion.main>
 
-        {/* Map Button (floating) */}
-        <motion.button 
-          initial={{ opacity: 0, scale: 0, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0 }}
-          transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.1, boxShadow: "0 15px 25px -5px rgba(124, 58, 237, 0.4)" }}
-          whileTap={{ scale: 0.9 }}
-          className="fixed bottom-20 right-4 z-20 bg-gradient-to-r from-purple-600 to-indigo-700 text-white p-3.5 rounded-full shadow-lg"
-          onClick={handleMapNavigation}
-        >
-          <Map className="w-5 h-5" />
-        </motion.button>
       </div>
     )
   }
@@ -1156,7 +1125,6 @@ export default function HotelSearchPage() {
   const renderHotelDetail = () => {
     return (
       <div className="flex flex-col h-full">
-        {/* Header avec gradient et fonctionnalités */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1181,7 +1149,6 @@ export default function HotelSearchPage() {
             />
           </div>
 
-          {/* Image principale avec caroussel */}
           <div className="relative w-full h-64 md:h-72 lg:h-80">
             <motion.div 
               initial={{ opacity: 0 }}
@@ -1271,13 +1238,12 @@ export default function HotelSearchPage() {
           </div>
         </motion.header>
 
-        {/* Main Content with hotel details */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex-1 overflow-y-auto"
+          className="flex-1 overflow-y-auto pb-24"
         >
           <div className="bg-white p-5">
             <motion.div 
@@ -1301,7 +1267,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.div>
 
-            {/* Overview section */}
             <motion.section
               variants={itemVariants}
               custom={1}
@@ -1337,7 +1302,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.section>
 
-            {/* Services section */}
             <motion.section
               variants={itemVariants}
               custom={2}
@@ -1361,7 +1325,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.section>
 
-            {/* Location section */}
             <motion.section
               variants={itemVariants}
               custom={3}
@@ -1372,10 +1335,26 @@ export default function HotelSearchPage() {
                 Emplacement
               </h2>
               
-              <div className="bg-gray-100 h-40 rounded-xl overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <MapPin size={32} className="text-purple-600" />
+              <div className="rounded-xl overflow-hidden relative">
+                <div className="w-full h-60 rounded-xl overflow-hidden">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="w-full h-full relative"
+                  >
+                    <iframe 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.1536547138526!2d2.339650515292373!3d48.873066308583354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66f3f81aae1bb%3A0x19c41e22b92aee7b!2sParis%20Opera%20House!5e0!3m2!1sen!2sfr!4v1654123456789!5m2!1sen!2sfr" 
+                      width="100%" 
+                      height="100%" 
+                      style={{ border: 0 }} 
+                      allowFullScreen={false} 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-xl"
+                    />
+                  </motion.div>
                 </div>
+                
                 <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-gray-800 to-transparent">
                   <div className="flex justify-between text-white">
                     <span className="font-medium text-sm">Centre-ville</span>
@@ -1386,18 +1365,38 @@ export default function HotelSearchPage() {
                       onClick={handleMapNavigation}
                     >
                       <Map size={14} />
-                      Voir sur la carte
+                      Carte complète
                     </motion.button>
                   </div>
                 </div>
               </div>
+              
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+                  <h4 className="text-sm font-medium text-gray-800 mb-1 flex items-center gap-1">
+                    <MapPin size={14} className="text-purple-600" />
+                    Adresse
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    123 Avenue des Champs-Élysées, 75008 Paris
+                  </p>
+                </div>
+                <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+                  <h4 className="text-sm font-medium text-gray-800 mb-1 flex items-center gap-1">
+                    <Star size={14} className="text-purple-600" />
+                    À proximité
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    0.8 km du centre-ville, 2.5 km de la gare
+                  </p>
+                </div>
+              </div>
             </motion.section>
 
-            {/* Additional info */}
             <motion.section
               variants={itemVariants}
               custom={4}
-              className="py-6"
+              className="py-6 mb-16" 
             >
               <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
                 <Clock size={20} className="text-purple-600" />
@@ -1446,41 +1445,42 @@ export default function HotelSearchPage() {
                 </div>
               </div>
             </motion.section>
+            
+            <motion.section
+              variants={itemVariants}
+              custom={5}
+              className="py-6 border-t border-gray-200 bg-white"
+            >
+              <div className="flex justify-between gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.03, backgroundColor: "#f9fafb" }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl py-3 font-medium"
+                >
+                  <Phone size={18} className="text-gray-600" />
+                  <span>Contacter</span>
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.03, 
+                    boxShadow: "0 10px 25px -5px rgba(124, 58, 237, 0.5)",
+                    backgroundImage: "linear-gradient(to right, #7c3aed, #6366f1)" 
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl py-3 font-medium shadow-md"
+                  onClick={() => navigate('/room?hotel=1')}
+                >
+                  <span>Réserver</span>
+                  <ArrowRight size={18} />
+                </motion.button>
+              </div>
+            </motion.section>
           </div>
         </motion.main>
-
-        {/* Floating Action Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="fixed bottom-16 left-0 right-0 p-4 flex justify-between gap-3 bg-white border-t border-gray-200 shadow-lg"
-        >
-          <motion.button
-            whileHover={{ scale: 1.03, backgroundColor: "#f9fafb" }}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl py-3 font-medium"
-          >
-            <Phone size={18} className="text-gray-600" />
-            <span>Contacter</span>
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ 
-              scale: 1.03, 
-              boxShadow: "0 10px 25px -5px rgba(124, 58, 237, 0.5)",
-              backgroundImage: "linear-gradient(to right, #7c3aed, #6366f1)" 
-            }}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl py-3 font-medium shadow-md"
-          >
-            <span>Réserver</span>
-            <ArrowRight size={18} />
-          </motion.button>
-        </motion.div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderLoadingScreen = () => {
     return (

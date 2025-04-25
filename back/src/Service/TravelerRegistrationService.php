@@ -5,10 +5,13 @@ namespace App\Service;
 use App\Dto\TravelerRegistrationRequest;
 use App\Entity\Traveler;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+
 class TravelerRegistrationService
 {
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly UserPasswordHasherInterface $passwordHasher
     ) {
     }
 
@@ -25,8 +28,11 @@ class TravelerRegistrationService
         $traveler->setFirstName($request->firstName);
         $traveler->setLastName($request->lastName);
         
-        // Hash the password
-        $hashedPassword = password_hash($request->password, PASSWORD_BCRYPT);
+        // Hash the password using Symfony's password hasher
+        $hashedPassword = $this->passwordHasher->hashPassword(
+            $traveler,
+            $request->password
+        );
         $traveler->setPasswordHash($hashedPassword);
 
         $this->entityManager->persist($traveler);

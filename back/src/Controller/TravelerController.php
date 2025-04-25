@@ -8,8 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api/travelers')]
+#[IsGranted('ROLE_ADMIN')]
 class TravelerController extends AbstractController
 {
     #[Route('/', name: 'get_travelers', methods: ['GET'])]
@@ -24,6 +26,11 @@ class TravelerController extends AbstractController
                 'firstName' => $traveler->getFirstName(),
                 'lastName' => $traveler->getLastName(),
                 'tel' => $traveler->getTel(),
+                'city' => $traveler->getCity(),
+                'status' => $traveler->getStatus(),
+                'point' => $traveler->getPoint(),
+                'pathImg' => $traveler->getPathImg(),
+                'roles' => $traveler->getRoles(),
                 'createdAt' => $traveler->getCreatedAt()->format('Y-m-d H:i:s'),
             ];
         }, $travelers);
@@ -40,6 +47,11 @@ class TravelerController extends AbstractController
             'firstName' => $traveler->getFirstName(),
             'lastName' => $traveler->getLastName(),
             'tel' => $traveler->getTel(),
+            'city' => $traveler->getCity(),
+            'status' => $traveler->getStatus(),
+            'point' => $traveler->getPoint(),
+            'pathImg' => $traveler->getPathImg(),
+            'roles' => $traveler->getRoles(),
             'createdAt' => $traveler->getCreatedAt()->format('Y-m-d H:i:s'),
         ];
 
