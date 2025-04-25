@@ -20,6 +20,7 @@ export default function BottomMenu() {
     if (path === "/profil" || path === "/profile") return "profile"
     if (path === "/negociation") return "negociation"
     if (path === "/settings") return "settings"
+    if (path === "/search") return "search"
     return "home"
   }
   
@@ -27,6 +28,16 @@ export default function BottomMenu() {
 
   const menuItems = [
     { id: "home", icon: Home, label: "Accueil", path: "/" },
+    { id: "explore", icon: Compass, label: "Carte", path: "/maps" },
+    { id: "favorites", icon: Heart, label: "Favoris", path: "/favorites" },
+    { id: "Negociation", icon: MessageCircle, label: "Négociation", path: "/negociation" },
+    { id: "settings", icon: Settings, label: "Paramètres", path: "/settings" },
+  ]
+
+
+  const desktopMenuItems = [
+    { id: "home", icon: Home, label: "Accueil", path: "/" },
+    { id: "search", icon: Search, label: "Recherche", path: "/search" },
     { id: "explore", icon: Compass, label: "Carte", path: "/maps" },
     { id: "favorites", icon: Heart, label: "Favoris", path: "/favorites" },
     { id: "Negociation", icon: MessageCircle, label: "Négociation", path: "/negociation" },
@@ -145,7 +156,7 @@ export default function BottomMenu() {
           
           <div className="flex-1 px-4 overflow-y-auto">
             <div className="space-y-2">
-              {menuItems.map((item, index) => {
+              {desktopMenuItems.map((item, index) => {
                 const Icon = item.icon
                 const isActive = activeTab === item.id
                 
@@ -244,7 +255,6 @@ export default function BottomMenu() {
 
   return (
     <>
-      {/* Nouvelle navbar mobile avec animation */}
       <motion.div 
         initial={{ y: 100 }}
         animate={{ y: 0 }}
@@ -252,10 +262,8 @@ export default function BottomMenu() {
         className="fixed bottom-0 left-0 right-0 w-full bg-white border-t z-40 pb-safe"
       >
         <div className="relative h-16">
-          {/* Fond de la barre de navigation avec effet glassmorphism */}
           <div className="absolute inset-0 backdrop-blur-md bg-white/90"></div>
           
-          {/* Indicateur de navigation active animé */}
           <AnimatePresence initial={false}>
             <motion.div
               key={activeTab}
@@ -268,7 +276,6 @@ export default function BottomMenu() {
             />
           </AnimatePresence>
           
-          {/* Boutons de navigation */}
           <div className="flex justify-around items-center h-full relative z-10">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
@@ -307,7 +314,6 @@ export default function BottomMenu() {
               );
             })}
 
-            {/* Bouton profil à la place du menu Profile */}
             <motion.button 
               onClick={() => handleProfileNavigation()}
               className="flex flex-col items-center justify-center w-full h-full"
@@ -340,7 +346,6 @@ export default function BottomMenu() {
         </div>
       </motion.div>
       
-      {/* Bouton flottant central */}
       <motion.button
         initial={{ y: 100, scale: 0 }}
         animate={{ y: 0, scale: 1 }}

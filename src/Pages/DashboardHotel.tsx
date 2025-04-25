@@ -1,8 +1,30 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { User, Bell, Tag, Settings, Home, ChevronLeft, ChevronRight, Calendar, TrendingUp, DollarSign, X, Users, Bed, Send } from "lucide-react"
+import { User, Bell, Tag, Settings, Home, ChevronLeft, ChevronRight, Calendar, TrendingUp, DollarSign, X, Users, Bed, Send, Plus, Trash2, Save, Camera, Clock, Filter } from "lucide-react"
 import BottomMenu from "../components/bottom-menu"
+
+interface Room {
+  id: string;
+  number: string;
+  type: string;
+  capacity: number;
+  price: number;
+  status: 'available' | 'occupied' | 'maintenance';
+  description: string;
+  amenities: string[];
+}
+
+interface Proposal {
+  id: string;
+  clientName: string;
+  avatar: string;
+  roomType: string;
+  nights: number;
+  price: number;
+  expiresIn: string;
+  urgent: boolean;
+}
 
 export default function HotelDashboard() {
   const [activeTab, setActiveTab] = useState("home")
@@ -189,6 +211,212 @@ export default function HotelDashboard() {
     { id: "home", icon: Home, label: "Accueil" },
   ]
 
+  const [showRoomManagementPopup, setShowRoomManagementPopup] = useState(false)
+  const [showAddRoomPopup, setShowAddRoomPopup] = useState(false)
+  const [rooms, setRooms] = useState<Room[]>([
+    { id: "1", number: "101", type: "Double Standard", capacity: 2, price: 120, status: 'available', description: "Chambre double avec vue sur la cour", amenities: ["Wifi", "TV", "Climatisation"] },
+    { id: "2", number: "102", type: "Double Standard", capacity: 2, price: 120, status: 'occupied', description: "Chambre double avec vue sur la cour", amenities: ["Wifi", "TV", "Climatisation"] },
+    { id: "3", number: "103", type: "Double Standard", capacity: 2, price: 120, status: 'available', description: "Chambre double avec vue sur la rue", amenities: ["Wifi", "TV", "Climatisation"] },
+    { id: "4", number: "201", type: "Suite Junior", capacity: 3, price: 180, status: 'available', description: "Suite spacieuse avec salon", amenities: ["Wifi", "TV", "Climatisation", "Mini-bar", "Coffre-fort"] },
+    { id: "5", number: "202", type: "Suite Junior", capacity: 3, price: 180, status: 'occupied', description: "Suite spacieuse avec salon", amenities: ["Wifi", "TV", "Climatisation", "Mini-bar", "Coffre-fort"] },
+    { id: "6", number: "301", type: "Suite Exécutive", capacity: 4, price: 220, status: 'maintenance', description: "Grande suite avec vue panoramique", amenities: ["Wifi", "TV", "Climatisation", "Mini-bar", "Coffre-fort", "Jacuzzi"] },
+  ])
+  const [newRoomData, setNewRoomData] = useState<Omit<Room, 'id'>>({
+    number: "",
+    type: "Double Standard",
+    capacity: 2,
+    price: 120,
+    status: 'available',
+    description: "",
+    amenities: ["Wifi", "TV", "Climatisation"]
+  })
+
+  const openRoomManagement = () => {
+    setShowRoomManagementPopup(true)
+  }
+
+  const closeRoomManagement = () => {
+    setShowRoomManagementPopup(false)
+  }
+
+  const openAddRoom = () => {
+    setShowAddRoomPopup(true)
+    setShowRoomManagementPopup(false)
+  }
+
+  const closeAddRoom = () => {
+    setShowAddRoomPopup(false)
+    setShowRoomManagementPopup(true)
+    setNewRoomData({
+      number: "",
+      type: "Double Standard",
+      capacity: 2,
+      price: 120,
+      status: 'available',
+      description: "",
+      amenities: ["Wifi", "TV", "Climatisation"]
+    })
+  }
+
+  const handleAddRoom = () => {
+    const newRoom: Room = {
+      id: Date.now().toString(),
+      ...newRoomData
+    }
+    setRooms([...rooms, newRoom])
+    closeAddRoom()
+  }
+
+  const handleRemoveRoom = (id: string) => {
+    setRooms(rooms.filter(room => room.id !== id))
+  }
+
+  const handleChangeNewRoom = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target
+    
+    if (name === "price" || name === "capacity") {
+      setNewRoomData({ ...newRoomData, [name]: parseInt(value) || 0 })
+    } else {
+      setNewRoomData({ ...newRoomData, [name]: value })
+    }
+  }
+
+  const handleToggleAmenity = (amenity: string) => {
+    const amenities = [...newRoomData.amenities]
+    if (amenities.includes(amenity)) {
+      setNewRoomData({ ...newRoomData, amenities: amenities.filter(a => a !== amenity) })
+    } else {
+      setNewRoomData({ ...newRoomData, amenities: [...amenities, amenity] })
+    }
+  }
+
+  const [showAllProposalsPopup, setShowAllProposalsPopup] = useState(false);
+  
+  const [proposals, setProposals] = useState<Proposal[]>([
+    {
+      id: "1",
+      clientName: "Marie Dupont",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      roomType: "Chambre double",
+      nights: 3,
+      price: 120,
+      expiresIn: "2h 14min",
+      urgent: false
+    },
+    {
+      id: "2",
+      clientName: "Paul Martin",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      roomType: "Suite",
+      nights: 1,
+      price: 180,
+      expiresIn: "45min",
+      urgent: true
+    },
+    {
+      id: "3",
+      clientName: "Sophie Laurent",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      roomType: "Suite Exécutive",
+      nights: 4,
+      price: 220,
+      expiresIn: "2h 55min",
+      urgent: false
+    },
+    {
+      id: "4",
+      clientName: "Thomas Bernard",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      roomType: "Double Supérieure",
+      nights: 2,
+      price: 150,
+      expiresIn: "1h 20min",
+      urgent: false
+    },
+    {
+      id: "5",
+      clientName: "Julie Moreau",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80",
+      roomType: "Chambre double",
+      nights: 3,
+      price: 120,
+      expiresIn: "10min",
+      urgent: true
+    }
+  ]);
+  
+  const [proposalFilter, setProposalFilter] = useState<'all' | 'urgent' | 'standard'>('all');
+  const [proposalSort, setProposalSort] = useState<'expires_soon' | 'price_high' | 'price_low' | 'newest'>('expires_soon');
+  
+  const openAllProposalsPopup = () => {
+    setShowAllProposalsPopup(true);
+  };
+  
+  const closeAllProposalsPopup = () => {
+    setShowAllProposalsPopup(false);
+    setProposalFilter('all');
+    setProposalSort('expires_soon');
+  };
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setProposalFilter(e.target.value as 'all' | 'urgent' | 'standard');
+  };
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setProposalSort(e.target.value as 'expires_soon' | 'price_high' | 'price_low' | 'newest');
+  };
+
+  const getExpirationMinutes = (expiresIn: string): number => {
+    if (expiresIn.includes('min')) return parseInt(expiresIn);
+    if (expiresIn.includes('h')) {
+      const hours = parseFloat(expiresIn);
+      return Math.floor(hours * 60);
+    }
+    return 1000;
+  };
+
+  const getFilteredAndSortedProposals = (): Proposal[] => {
+
+    let result = proposals.filter(proposal => {
+      if (proposalFilter === 'all') return true;
+      if (proposalFilter === 'urgent') return proposal.urgent;
+      if (proposalFilter === 'standard') return !proposal.urgent;
+      return true;
+    });
+
+
+    result = [...result].sort((a, b) => {
+      if (proposalSort === 'expires_soon') {
+        return getExpirationMinutes(a.expiresIn) - getExpirationMinutes(b.expiresIn);
+      }
+      if (proposalSort === 'price_high') return b.price - a.price;
+      if (proposalSort === 'price_low') return a.price - b.price;
+      return parseInt(b.id) - parseInt(a.id);
+    });
+
+    return result;
+  };
+
+
+  const getExpirationColor = (expiresIn: string): string => {
+
+    const minutes = getExpirationMinutes(expiresIn);
+    
+    if (minutes <= 30) {
+
+      return "bg-red-500";
+    } else if (minutes <= 60) {
+
+      return "bg-orange-500";
+    } else if (minutes <= 120) {
+
+      return "bg-yellow-500";
+    } else {
+
+      return "bg-green-500";
+    }
+  }
+
   return (
     <div className="flex flex-col h-screen bg-white relative">
       <div className="flex-1 p-4 flex flex-col pb-16">
@@ -228,36 +456,36 @@ export default function HotelDashboard() {
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
                       <img 
-                        src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80" 
+                        src={proposals[0].avatar} 
                         alt="Client"
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
-                      <p className="font-medium">Marie Dupont</p>
-                      <p className="text-xs text-gray-500">Chambre double • 3 nuits</p>
+                      <p className="font-medium">{proposals[0].clientName}</p>
+                      <p className="text-xs text-gray-500">{proposals[0].roomType} • {proposals[0].nights} nuits</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-800">120€</p>
+                    <p className="font-bold text-gray-800">{proposals[0].price}€</p>
                     <p className="text-xs text-gray-500">par nuit</p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-2">
                   <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-yellow-400 mr-1 animate-pulse"></div>
-                    <span className="text-xs text-gray-600">Expire dans 2h 14min</span>
+                    <div className={`w-4 h-4 rounded-full ${getExpirationColor(proposals[0].expiresIn)} mr-1 animate-pulse`}></div>
+                    <span className="text-xs text-gray-600">Expire dans {proposals[0].expiresIn}</span>
                   </div>
                   <div className="flex gap-2">
                     <button className="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full hover:bg-red-200">Refuser</button>
                     <button 
                       className="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200"
                       onClick={() => handleOfferClick({
-                        name: "Marie Dupont",
-                        roomType: "Chambre double",
-                        nights: 3,
-                        price: 120,
-                        avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80"
+                        name: proposals[0].clientName,
+                        roomType: proposals[0].roomType,
+                        nights: proposals[0].nights,
+                        price: proposals[0].price,
+                        avatar: proposals[0].avatar
                       })}
                     >
                       Faire une offre
@@ -272,36 +500,80 @@ export default function HotelDashboard() {
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
                       <img 
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80" 
+                        src={proposals[1].avatar} 
                         alt="Client"
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
-                      <p className="font-medium">Paul Martin</p>
-                      <p className="text-xs text-gray-500">Suite • 1 nuit</p>
+                      <p className="font-medium">{proposals[1].clientName}</p>
+                      <p className="text-xs text-gray-500">{proposals[1].roomType} • {proposals[1].nights} nuit</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-800">180€</p>
+                    <p className="font-bold text-gray-800">{proposals[1].price}€</p>
                     <p className="text-xs text-gray-500">par nuit</p>
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-2">
                   <div className="flex items-center">
-                    <div className="w-4 h-4 rounded-full bg-orange-500 mr-1 animate-pulse"></div>
-                    <span className="text-xs text-gray-600">Expire dans 45min</span>
+                    <div className={`w-4 h-4 rounded-full ${getExpirationColor(proposals[1].expiresIn)} mr-1 animate-pulse`}></div>
+                    <span className="text-xs text-gray-600">Expire dans {proposals[1].expiresIn}</span>
                   </div>
                   <div className="flex gap-2">
                     <button className="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full hover:bg-red-200">Refuser</button>
                     <button 
                       className="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200"
                       onClick={() => handleOfferClick({
-                        name: "Paul Martin",
-                        roomType: "Suite",
-                        nights: 1,
-                        price: 180,
-                        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=256&q=80"
+                        name: proposals[1].clientName,
+                        roomType: proposals[1].roomType,
+                        nights: proposals[1].nights,
+                        price: proposals[1].price,
+                        avatar: proposals[1].avatar
+                      })}
+                    >
+                      Faire une offre
+                    </button>
+                    <button className="px-3 py-1 text-xs bg-green-500 text-white rounded-full hover:bg-green-600">Accepter</button>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border-b pb-3">
+                <div className="flex justify-between">
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
+                      <img 
+                        src={proposals[4].avatar} 
+                        alt="Client"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="font-medium">{proposals[4].clientName}</p>
+                      <p className="text-xs text-gray-500">{proposals[4].roomType} • {proposals[4].nights} nuits</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-gray-800">{proposals[4].price}€</p>
+                    <p className="text-xs text-gray-500">par nuit</p>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center mt-2">
+                  <div className="flex items-center">
+                    <div className={`w-4 h-4 rounded-full ${getExpirationColor(proposals[4].expiresIn)} mr-1 animate-pulse`}></div>
+                    <span className="text-xs text-gray-600">Expire dans {proposals[4].expiresIn}</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="px-3 py-1 text-xs bg-red-100 text-red-600 rounded-full hover:bg-red-200">Refuser</button>
+                    <button 
+                      className="px-3 py-1 text-xs bg-blue-100 text-blue-600 rounded-full hover:bg-blue-200"
+                      onClick={() => handleOfferClick({
+                        name: proposals[4].clientName,
+                        roomType: proposals[4].roomType,
+                        nights: proposals[4].nights,
+                        price: proposals[4].price,
+                        avatar: proposals[4].avatar
                       })}
                     >
                       Faire une offre
@@ -312,8 +584,11 @@ export default function HotelDashboard() {
               </div>
               
               <div className="text-center pt-2">
-                <button className="text-sm text-yellow-500 font-medium hover:underline">
-                  Voir toutes les propositions (5) →
+                <button 
+                  className="text-sm text-yellow-500 font-medium hover:underline"
+                  onClick={openAllProposalsPopup}
+                >
+                  Voir toutes les propositions ({proposals.length}) →
                 </button>
               </div>
             </div>
@@ -487,11 +762,7 @@ export default function HotelDashboard() {
                 <p className="text-xs text-green-500">+0.2 cette semaine</p>
               </div>
             </div>
-            <div className="flex-1 flex items-center justify-center">
-              <button className="text-blue-500 text-sm font-medium hover:underline">
-                Voir le rapport complet →
-              </button>
-            </div>
+
           </div>
           
           <div className="bg-white rounded-lg shadow-md p-4 flex flex-col">
@@ -522,8 +793,11 @@ export default function HotelDashboard() {
                 </div>
               </div>
               <div className="text-center mt-4">
-                <button className="text-green-600 text-sm font-medium hover:underline">
-                  Gérer les disponibilités →
+                <button 
+                  className="text-green-600 text-sm font-medium hover:underline"
+                  onClick={openRoomManagement}
+                >
+                  Gérer les disponibilités → 
                 </button>
               </div>
             </div>
@@ -732,6 +1006,420 @@ export default function HotelDashboard() {
             </div>
           </div>
         </>
+      )}
+
+      {showRoomManagementPopup && (
+        <div 
+          className="fixed inset-0 backdrop-blur-sm bg-white/30 z-40 flex items-center justify-center"
+          onClick={closeRoomManagement}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 z-50 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-green-600 text-white p-4 flex justify-between items-center">
+              <h3 className="text-lg font-medium">Gestion des chambres</h3>
+              <button 
+                onClick={closeRoomManagement}
+                className="hover:bg-green-700 p-1 rounded transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-4 flex-1 overflow-hidden flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <div className="font-medium text-gray-700">
+                  {rooms.length} chambres au total • {rooms.filter(r => r.status === 'available').length} disponibles
+                </div>
+                <button 
+                  className="bg-green-600 text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 hover:bg-green-700 transition-colors"
+                  onClick={openAddRoom}
+                >
+                  <Plus size={16} />
+                  Ajouter une chambre
+                </button>
+              </div>
+
+              <div className="border rounded-lg overflow-hidden flex-1">
+                <div className="overflow-y-auto max-h-[50vh]">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50 sticky top-0 z-10">
+                      <tr>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">N° Chambre</th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Capacité</th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prix</th>
+                        <th scope="col" className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                        <th scope="col" className="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {rooms.map((room) => (
+                        <tr key={room.id} className="hover:bg-gray-50">
+                          <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{room.number}</td>
+                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{room.type}</td>
+                          <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-700">{room.capacity} pers.</td>
+                          <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">{room.price}€</td>
+                          <td className="px-4 py-2 whitespace-nowrap">
+                            <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              room.status === 'available' ? 'bg-green-100 text-green-800' : 
+                              room.status === 'occupied' ? 'bg-blue-100 text-blue-800' : 
+                              'bg-orange-100 text-orange-800'
+                            }`}>
+                              {room.status === 'available' ? 'Disponible' : 
+                               room.status === 'occupied' ? 'Occupée' : 
+                               'Maintenance'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2 whitespace-nowrap text-right text-sm">
+                            <button 
+                              className="text-red-600 hover:text-red-800 ml-3"
+                              onClick={() => handleRemoveRoom(room.id)}
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 flex justify-end gap-2 mt-auto">
+              <button 
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium transition-colors"
+                onClick={closeRoomManagement}
+              >
+                Fermer
+              </button>
+              <button className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium transition-colors">
+                Sauvegarder les modifications
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showAddRoomPopup && (
+        <div 
+          className="fixed inset-0 backdrop-blur-sm bg-white/30 z-50 flex items-center justify-center"
+          onClick={closeAddRoom}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 z-50 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-green-600 text-white p-4 flex justify-between items-center">
+              <h3 className="text-lg font-medium">Ajouter une nouvelle chambre</h3>
+              <button 
+                onClick={closeAddRoom}
+                className="hover:bg-green-700 p-1 rounded transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="col-span-1">
+                  <div className="mb-4">
+                    <label htmlFor="number" className="block text-sm font-medium text-gray-700 mb-1">
+                      Numéro de chambre*
+                    </label>
+                    <input
+                      type="text"
+                      name="number"
+                      id="number"
+                      value={newRoomData.number}
+                      onChange={handleChangeNewRoom}
+                      placeholder="ex: 101"
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label htmlFor="type" className="block text-sm font-medium text-gray-700 mb-1">
+                      Type de chambre*
+                    </label>
+                    <select
+                      name="type"
+                      id="type"
+                      value={newRoomData.type}
+                      onChange={handleChangeNewRoom}
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    >
+                      <option value="Double Standard">Double Standard</option>
+                      <option value="Double Supérieure">Double Supérieure</option>
+                      <option value="Suite Junior">Suite Junior</option>
+                      <option value="Suite Exécutive">Suite Exécutive</option>
+                    </select>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label htmlFor="capacity" className="block text-sm font-medium text-gray-700 mb-1">
+                      Capacité (personnes)*
+                    </label>
+                    <input
+                      type="number"
+                      name="capacity"
+                      id="capacity"
+                      value={newRoomData.capacity}
+                      onChange={handleChangeNewRoom}
+                      min="1"
+                      max="10"
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-1">
+                      Prix par nuit (€)*
+                    </label>
+                    <input
+                      type="number"
+                      name="price"
+                      id="price"
+                      value={newRoomData.price}
+                      onChange={handleChangeNewRoom}
+                      min="1"
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
+                      Statut*
+                    </label>
+                    <select
+                      name="status"
+                      id="status"
+                      value={newRoomData.status}
+                      onChange={handleChangeNewRoom}
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                      required
+                    >
+                      <option value="available">Disponible</option>
+                      <option value="occupied">Occupée</option>
+                      <option value="maintenance">En maintenance</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="col-span-1">
+                  <div className="mb-4">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      name="description"
+                      id="description"
+                      value={newRoomData.description}
+                      onChange={handleChangeNewRoom}
+                      rows={3}
+                      placeholder="Décrivez la chambre..."
+                      className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                    ></textarea>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Photos
+                    </label>
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center text-center">
+                      <Camera size={36} className="text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">Glissez-déposez des images ou</p>
+                      <button className="mt-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-sm text-gray-700 rounded-lg transition-colors">
+                        Parcourir
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Équipements
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {['Wifi', 'TV', 'Climatisation', 'Mini-bar', 'Coffre-fort', 'Sèche-cheveux', 'Balcon', 'Vue sur mer'].map((amenity) => (
+                        <div key={amenity} className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id={`amenity-${amenity}`}
+                            checked={newRoomData.amenities.includes(amenity)}
+                            onChange={() => handleToggleAmenity(amenity)}
+                            className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
+                          />
+                          <label htmlFor={`amenity-${amenity}`} className="ml-2 text-sm text-gray-700">
+                            {amenity}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 flex justify-between gap-2 mt-auto">
+              <div className="text-xs text-gray-500">* Champs obligatoires</div>
+              <div className="flex gap-2">
+                <button 
+                  className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium transition-colors"
+                  onClick={closeAddRoom}
+                >
+                  Annuler
+                </button>
+                <button 
+                  className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-medium transition-colors flex items-center gap-1"
+                  onClick={handleAddRoom}
+                  disabled={!newRoomData.number || !newRoomData.type}
+                >
+                  <Save size={16} />
+                  Enregistrer la chambre
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Popup pour voir toutes les propositions */}
+      {showAllProposalsPopup && (
+        <div 
+          className="fixed inset-0 backdrop-blur-sm bg-white/30 z-40 flex items-center justify-center"
+          onClick={closeAllProposalsPopup}
+        >
+          <div 
+            className="bg-white rounded-lg shadow-xl w-full max-w-4xl mx-4 z-50 overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="bg-yellow-500 text-white p-4 flex justify-between items-center">
+              <h3 className="text-lg font-medium">Toutes les propositions</h3>
+              <button 
+                onClick={closeAllProposalsPopup}
+                className="hover:bg-yellow-600 p-1 rounded transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-4 border-b">
+              <div className="flex justify-between items-center flex-wrap gap-2">
+                <div className="font-medium text-gray-700">
+                  {proposals.length} proposition(s) en attente • {proposalFilter === 'all' ? 'Toutes' : proposalFilter === 'urgent' ? 'Urgentes' : 'Standards'}
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="bg-gray-100 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Filter size={16} className="text-gray-500" />
+                    <select 
+                      className="bg-transparent border-none text-sm focus:outline-none"
+                      value={proposalFilter}
+                      onChange={handleFilterChange}
+                    >
+                      <option value="all">Tous</option>
+                      <option value="urgent">Urgents uniquement</option>
+                      <option value="standard">Standards uniquement</option>
+                    </select>
+                  </div>
+                  <div className="bg-gray-100 rounded-lg px-3 py-2 flex items-center gap-2">
+                    <Clock size={16} className="text-gray-500" />
+                    <select 
+                      className="bg-transparent border-none text-sm focus:outline-none"
+                      value={proposalSort}
+                      onChange={handleSortChange}
+                    >
+                      <option value="expires_soon">Expire bientôt</option>
+                      <option value="price_high">Prix (élevé à bas)</option>
+                      <option value="price_low">Prix (bas à élevé)</option>
+                      <option value="newest">Plus récent</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="overflow-y-auto flex-1">
+              <div className="p-4 space-y-4">
+                {getFilteredAndSortedProposals().map((proposal) => (
+                  <div 
+                    key={proposal.id}
+                    className={`bg-white border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow ${
+                      proposal.urgent ? 'border-l-4 border-l-orange-500' : ''
+                    }`}
+                  >
+                    <div className="flex justify-between flex-wrap gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
+                          <img 
+                            src={proposal.avatar} 
+                            alt={proposal.clientName}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-800">{proposal.clientName}</h4>
+                          <p className="text-xs text-gray-500">
+                            {proposal.roomType} • {proposal.nights} nuit{proposal.nights > 1 ? 's' : ''}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-gray-800">{proposal.price}€ <span className="text-xs font-normal text-gray-500">/ nuit</span></p>
+                        <div className="flex items-center mt-1 justify-end">
+                          <div 
+                            className={`w-2 h-2 rounded-full mr-1 ${getExpirationColor(proposal.expiresIn)} ${
+                              getExpirationMinutes(proposal.expiresIn) <= 180 ? "animate-pulse" : ""
+                            }`}
+                          ></div>
+                          <span className="text-xs text-gray-500">Expire dans {proposal.expiresIn}</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end mt-4 gap-2">
+                      <button className="px-3 py-1.5 text-sm bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors">
+                        Refuser
+                      </button>
+                      <button 
+                        className="px-3 py-1.5 text-sm bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+                        onClick={() => {
+                          handleOfferClick({
+                            name: proposal.clientName,
+                            roomType: proposal.roomType,
+                            nights: proposal.nights,
+                            price: proposal.price,
+                            avatar: proposal.avatar
+                          });
+                          closeAllProposalsPopup();
+                        }}
+                      >
+                        Négocier
+                      </button>
+                      <button className="px-3 py-1.5 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        Accepter
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-gray-50 p-4 flex justify-end gap-2 mt-auto">
+              <button 
+                className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 text-sm font-medium transition-colors"
+                onClick={closeAllProposalsPopup}
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <BottomMenu />
