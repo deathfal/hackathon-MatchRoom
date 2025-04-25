@@ -102,6 +102,24 @@ export default function Home() {
   const handleProfileNavigation = () => {
     navigate("/profil")
   }
+  
+  const handleMapsNavigation = () => {
+    navigate("/maps")
+  }
+  
+
+  const handleFavoritesNavigation = () => {
+    navigate("/favorites")
+  }
+  
+  const handleNegotiationsNavigation = () => {
+    navigate("/negociation")
+  }
+  
+  
+  const handleSuggestionsNavigation = () => {
+    navigate("/search?tab=suggestions")
+  }
 
   return (
     <div className="w-full bg-gradient-to-b from-white to-gray-50 min-h-screen flex flex-col">
@@ -112,7 +130,6 @@ export default function Home() {
         </div>
       ) : (
         <>
-          {/* Header amélioré avec gradient */}
           <motion.header 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,7 +176,6 @@ export default function Home() {
             </motion.div>
           </motion.header>
 
-          {/* Barre de recherche */}
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -178,15 +194,18 @@ export default function Home() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="absolute right-3 top-2.5 bg-purple-100 text-purple-600 rounded-full p-1"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleMapsNavigation();
+                }}
               >
                 <Map size={18} />
               </motion.div>
             </div>
           </motion.div>
 
-          {/* Main Content */}
           <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
-            {/* Points Section */}
+
             <motion.section 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -240,7 +259,6 @@ export default function Home() {
               </div>
             </motion.section>
 
-            {/* Reservations Section */}
             <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -261,6 +279,7 @@ export default function Home() {
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
+                  onClick={handleFavoritesNavigation}
                   className="text-purple-600 hover:text-purple-700 transition-colors text-sm font-medium"
                 >
                   Voir tout →
@@ -314,7 +333,6 @@ export default function Home() {
               </div>
             </motion.section>
 
-            {/* Negotiations Section */}
             <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -336,6 +354,7 @@ export default function Home() {
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
+                  onClick={handleNegotiationsNavigation}
                   className="text-gray-600 hover:text-gray-800 transition-colors text-sm font-medium"
                 >
                   Voir tout →
@@ -377,7 +396,6 @@ export default function Home() {
               </div>
             </motion.section>
 
-            {/* Suggestions Section */}
             <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -398,6 +416,7 @@ export default function Home() {
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
+                  onClick={handleSuggestionsNavigation}
                   className="text-purple-600 hover:text-purple-700 transition-colors text-sm font-medium"
                 >
                   Explorer →
@@ -466,7 +485,6 @@ export default function Home() {
             </motion.section>
           </main>
 
-          {/* Bouton d'aide flottant */}
           <motion.button 
             whileHover={{ scale: 1.1, rotate: 10 }}
             whileTap={{ scale: 0.9 }}
@@ -475,7 +493,6 @@ export default function Home() {
             <HelpCircle size={24} />
           </motion.button>
 
-          {/* Popup pour le questionnaire */}
           <AnimatePresence>
             {showQuestionnairePopup && (
               <motion.div 
@@ -492,7 +509,7 @@ export default function Home() {
                   exit={{ scale: 0.9, opacity: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 >
-                  {/* Header avec image de fond et dégradé */}
+
                   <div className="relative">
                     <div 
                       className="h-32 bg-cover bg-center" 
@@ -588,7 +605,6 @@ export default function Home() {
             )}
           </AnimatePresence>
 
-          {/* Bottom Menu */}
           <BottomMenu />
         </>
       )}

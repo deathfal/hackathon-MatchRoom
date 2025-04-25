@@ -243,14 +243,6 @@ export default function RoomSelectionPage() {
                   </div>
                   <p className="mt-3 text-gray-600 line-clamp-3">{hotel?.description}</p>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <span className="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
-                      <Award size={14} />
-                      Annulation gratuite jusqu'à 48h avant
-                    </span>
-                    <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-1 rounded-full flex items-center gap-1">
-                      <Check size={14} />
-                      Paiement à l'arrivée
-                    </span>
                   </div>
                 </div>
               </div>
@@ -318,12 +310,6 @@ export default function RoomSelectionPage() {
                           <div className="flex items-center gap-2">
                             {displayPrice(room.price, room.originalPrice)}
                             
-                            {room.originalPrice && (
-                              <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
-                                <DollarSign size={12} />
-                                {Math.round((1 - room.price / room.originalPrice) * 100)}% de réduction
-                              </span>
-                            )}
                           </div>
                           <div className="flex gap-2 w-full sm:w-auto">
                             <button
@@ -444,7 +430,6 @@ export default function RoomSelectionPage() {
         )}
       </AnimatePresence>
 
-      {/* Popup pour faire une offre */}
       <AnimatePresence>
         {showOfferPopup && selectedRoomId && (
           <motion.div 
@@ -651,7 +636,7 @@ const mockRooms: Room[] = [
     name: "Chambre Classique",
     type: "Chambre Double",
     price: 120,
-    originalPrice: 145,
+    originalPrice: null,
     capacity: 2,
     size: 22,
     beds: "1 lit double",
@@ -669,7 +654,7 @@ const mockRooms: Room[] = [
     name: "Chambre Supérieure",
     type: "Chambre Double Vue sur Ville",
     price: 160,
-    originalPrice: 180,
+    originalPrice: null,
     capacity: 2,
     size: 28,
     beds: "1 lit queen-size",
@@ -687,7 +672,7 @@ const mockRooms: Room[] = [
     name: "Suite Junior",
     type: "Suite avec Salon",
     price: 220,
-    originalPrice: 260,
+    originalPrice: null,
     capacity: 3,
     size: 38,
     beds: "1 lit king-size et 1 canapé-lit",
