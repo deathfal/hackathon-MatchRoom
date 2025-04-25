@@ -39,7 +39,7 @@ class HotelRoomController extends AbstractController
         }
 
         // Call the Node.js API to get the dataset
-        $response = $this->httpClient->request('GET', 'http://localhost:3000/hotels');
+        $response = $this->httpClient->request('GET', 'http://host.docker.internal:3000/hotels'); // Remplacez localhost par host.docker.internal
         if ($response->getStatusCode() !== 200) {
             return new JsonResponse(['error' => 'Failed to fetch dataset from API'], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
