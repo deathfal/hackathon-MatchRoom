@@ -48,7 +48,7 @@ export default function HotelSearchPage() {
   const [activePhotoIndex, setActivePhotoIndex] = useState(0)
   const [isFavorite, setIsFavorite] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
-
+  const [showMap, setShowMap] = useState(true);
   const controls = useAnimation()
   const searchRef = useRef(null)
   const isInView = useInView(searchRef, { once: true })
@@ -883,7 +883,7 @@ export default function HotelSearchPage() {
             <motion.div 
               whileHover={{ scale: 1.1, rotate: 10 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full p-1.5 shadow-md"
+              className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full p-1.5 shadow-md"
             >
               <Sparkles size={16} className="text-white" />
             </motion.div>
@@ -1335,10 +1335,26 @@ export default function HotelSearchPage() {
                 Emplacement
               </h2>
               
-              <div className="bg-gray-100 h-40 rounded-xl overflow-hidden relative">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <MapPin size={32} className="text-purple-600" />
+              <div className="rounded-xl overflow-hidden relative">
+                <div className="w-full h-60 rounded-xl overflow-hidden">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="w-full h-full relative"
+                  >
+                    <iframe 
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2624.1536547138526!2d2.339650515292373!3d48.873066308583354!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47e66f3f81aae1bb%3A0x19c41e22b92aee7b!2sParis%20Opera%20House!5e0!3m2!1sen!2sfr!4v1654123456789!5m2!1sen!2sfr" 
+                      width="100%" 
+                      height="100%" 
+                      style={{ border: 0 }} 
+                      allowFullScreen={false} 
+                      loading="lazy" 
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="rounded-xl"
+                    />
+                  </motion.div>
                 </div>
+                
                 <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-gray-800 to-transparent">
                   <div className="flex justify-between text-white">
                     <span className="font-medium text-sm">Centre-ville</span>
@@ -1349,9 +1365,30 @@ export default function HotelSearchPage() {
                       onClick={handleMapNavigation}
                     >
                       <Map size={14} />
-                      Voir sur la carte
+                      Carte complète
                     </motion.button>
                   </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+                  <h4 className="text-sm font-medium text-gray-800 mb-1 flex items-center gap-1">
+                    <MapPin size={14} className="text-purple-600" />
+                    Adresse
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    123 Avenue des Champs-Élysées, 75008 Paris
+                  </p>
+                </div>
+                <div className="bg-purple-50 rounded-lg p-3 border border-purple-100">
+                  <h4 className="text-sm font-medium text-gray-800 mb-1 flex items-center gap-1">
+                    <Star size={14} className="text-purple-600" />
+                    À proximité
+                  </h4>
+                  <p className="text-sm text-gray-600">
+                    0.8 km du centre-ville, 2.5 km de la gare
+                  </p>
                 </div>
               </div>
             </motion.section>
