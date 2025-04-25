@@ -26,6 +26,24 @@ class Hotel
 
     #[ORM\Column(length: 255)]
     private ?string $location = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $city = null;
+    
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $type = null;
+    
+    #[ORM\Column(length: 14, nullable: true)]
+    private ?string $siret = null;
+    
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $category = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $siteWeb = null;
+    
+    #[ORM\Column(type: 'float', nullable: true)]
+    private ?float $ratings = null;
 
     #[ORM\ManyToOne(targetEntity: HotelGroup::class)]
     private ?HotelGroup $hotelGroup = null;
@@ -96,6 +114,72 @@ class Hotel
     public function setHotelGroup(?HotelGroup $hotelGroup): static
     {
         $this->hotelGroup = $hotelGroup;
+        return $this;
+    }
+    
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): static
+    {
+        $this->city = $city;
+        return $this;
+    }
+    
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): static
+    {
+        $this->type = $type;
+        return $this;
+    }
+    
+    public function getSiret(): ?string
+    {
+        return $this->siret;
+    }
+
+    public function setSiret(?string $siret): static
+    {
+        $this->siret = $siret;
+        return $this;
+    }
+    
+    public function getCategory(): ?int
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?int $category): static
+    {
+        $this->category = $category;
+        return $this;
+    }
+    
+    public function getSiteWeb(): ?string
+    {
+        return $this->siteWeb;
+    }
+
+    public function setSiteWeb(?string $siteWeb): static
+    {
+        $this->siteWeb = $siteWeb;
+        return $this;
+    }
+    
+    public function getRatings(): ?float
+    {
+        return $this->ratings;
+    }
+
+    public function setRatings(?float $ratings): static
+    {
+        $this->ratings = $ratings;
         return $this;
     }
 }
