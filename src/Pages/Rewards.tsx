@@ -1,12 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Star, ChevronLeft, Award, Trophy, Calendar, Gift, Sparkles, CornerRightDown, HelpCircle, TrendingUp, Flame } from "lucide-react"
+import { Star, ChevronLeft, Award, Trophy, Calendar, Gift, Sparkles, CornerRightDown, HelpCircle, TrendingUp, Flame, X, Filter, ArrowDownUp, ChevronsUpDown } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import BottomMenu from "../components/bottom-menu"
 
-// Image par défaut pour le profil
 const DEFAULT_PROFILE_IMAGE = "https://images.unsplash.com/photo-1561383818-ca5eee8c1d06?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
 export default function RewardsPage() {
@@ -14,8 +13,10 @@ export default function RewardsPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [selectedAdvantage, setSelectedAdvantage] = useState<number | null>(null)
   const [hoveredAdvantage, setHoveredAdvantage] = useState<number | null>(null)
+  const [showHistoryPopup, setShowHistoryPopup] = useState(false)
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc')
+  const [filterType, setFilterType] = useState<'all' | 'earned' | 'spent'>('all')
   
-  // Points data
   const pointsData = {
     current: 2850,
     nextLevel: 3500,
@@ -23,7 +24,6 @@ export default function RewardsPage() {
     level: "GOLD"
   }
 
-  // Simulation du chargement des données
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
@@ -31,7 +31,6 @@ export default function RewardsPage() {
     return () => clearTimeout(timer)
   }, [])
 
-  // Advantages data
   const advantages = [
     { id: 1, name: "Réduction 10%", stars: 3, description: "Sur votre prochaine réservation", icon: <Gift size={20} /> },
     { id: 2, name: "Surclassement", stars: 3, description: "Chambre supérieure sans frais", icon: <TrendingUp size={20} /> },
@@ -40,20 +39,54 @@ export default function RewardsPage() {
     { id: 5, name: "WiFi premium", stars: 1, description: "Accès haute vitesse", icon: <Sparkles size={20} /> },
   ]
 
-  // History data
-  const historyData = [
-    { id: 1, date: "15/06/2024", action: "Séjour Hôtel Paris", points: "+350" },
-    { id: 2, date: "03/05/2024", action: "Utilisation réduction", points: "-200" },
-    { id: 3, date: "22/04/2024", action: "Séjour Hôtel Lyon", points: "+275" },
-    { id: 4, date: "05/03/2024", action: "Séjour Hôtel Marseille", points: "+325" },
+  const completeHistoryData = [
+    { id: 1, date: "15/06/2024", action: "Séjour Hôtel Paris", points: "+350", type: "earned" },
+    { id: 2, date: "03/05/2024", action: "Utilisation réduction", points: "-200", type: "spent" },
+    { id: 3, date: "22/04/2024", action: "Séjour Hôtel Lyon", points: "+275", type: "earned" },
+    { id: 4, date: "05/03/2024", action: "Séjour Hôtel Marseille", points: "+325", type: "earned" },
+    { id: 5, date: "18/02/2024", action: "Surclassement chambre", points: "-150", type: "spent" },
+    { id: 6, date: "02/02/2024", action: "Séjour Hôtel Nice", points: "+290", type: "earned" },
+    { id: 7, date: "15/01/2024", action: "Points de bienvenue", points: "+100", type: "earned" },
+    { id: 8, date: "05/01/2024", action: "Séjour Hôtel Strasbourg", points: "+310", type: "earned" },
+    { id: 9, date: "22/12/2023", action: "Utilisation petit-déjeuner", points: "-75", type: "spent" },
+    { id: 10, date: "10/12/2023", action: "Séjour Hôtel Bordeaux", points: "+265", type: "earned" },
+    { id: 11, date: "28/11/2023", action: "Programme parrainage", points: "+150", type: "earned" },
+    { id: 12, date: "15/11/2023", action: "Utilisation late check-out", points: "-100", type: "spent" },
+    { id: 13, date: "01/11/2023", action: "Séjour Hôtel Lille", points: "+220", type: "earned" },
+    { id: 14, date: "10/10/2023", action: "Séjour Hôtel Nantes", points: "+240", type: "earned" },
+    { id: 15, date: "25/09/2023", action: "Première réservation", points: "+150", type: "earned" },
   ]
 
-  // Handle close
+  const historyData = completeHistoryData.slice(0, 4)
+
+  const getFilteredHistory = () => {
+    let filtered = [...completeHistoryData];
+    
+    if (filterType !== 'all') {
+      filtered = filtered.filter(item => item.type === filterType);
+    }
+    
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.date.split('/').reverse().join('/'));
+      const dateB = new Date(b.date.split('/').reverse().join('/'));
+      return sortOrder === 'desc' ? 
+        dateB.getTime() - dateA.getTime() : 
+        dateA.getTime() - dateB.getTime();
+    });
+    
+    return filtered;
+  }
+
   const handleClose = () => {
     navigate(-1)
   }
 
-  // Animation variants
+
+  const toggleSortOrder = () => {
+    setSortOrder(prev => prev === 'desc' ? 'asc' : 'desc');
+  }
+
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -92,6 +125,20 @@ export default function RewardsPage() {
     })
   }
 
+  const popupVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { 
+      opacity: 1, 
+      scale: 1,
+      transition: { type: "spring", stiffness: 300, damping: 25 }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.9,
+      transition: { duration: 0.2 }
+    }
+  }
+
   return (
     <div className="w-full bg-gradient-to-b from-white to-gray-50 min-h-screen flex flex-col">
       {isLoading ? (
@@ -101,7 +148,7 @@ export default function RewardsPage() {
         </div>
       ) : (
         <>
-          {/* Header amélioré avec gradient */}
+
           <motion.header 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -140,7 +187,7 @@ export default function RewardsPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className="relative"
+              className="relative mr-0 md:mr-15"
             >
               <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-lg md:h-20 md:w-20">
                 <img
@@ -158,9 +205,7 @@ export default function RewardsPage() {
             </motion.div>
           </motion.header>
 
-          {/* Main Content */}
           <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto max-w-4xl mx-auto w-full">
-            {/* Points and status section */}
             <motion.section 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -241,7 +286,6 @@ export default function RewardsPage() {
               </div>
             </motion.section>
 
-            {/* Avantages disponibles */}
             <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -321,7 +365,6 @@ export default function RewardsPage() {
               </div>
             </motion.section>
 
-            {/* Historique */}
             <motion.section 
               variants={containerVariants}
               initial="hidden"
@@ -344,6 +387,7 @@ export default function RewardsPage() {
                 </div>
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
+                  onClick={() => setShowHistoryPopup(true)}
                   className="text-amber-600 hover:text-amber-700 transition-colors text-sm font-medium"
                 >
                   Voir tout →
@@ -386,7 +430,121 @@ export default function RewardsPage() {
             </motion.section>
           </main>
 
-          {/* Bouton d'aide flottant */}
+          <AnimatePresence>
+            {showHistoryPopup && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/40"
+                onClick={() => setShowHistoryPopup(false)}
+              >
+                <motion.div 
+                  className="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[85vh] overflow-hidden"
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  variants={popupVariants}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="bg-gradient-to-r from-amber-500 to-yellow-500 p-5 flex justify-between items-center text-white">
+                    <h3 className="text-xl font-bold flex items-center gap-2">
+                      <Calendar size={20} />
+                      Historique complet des points
+                    </h3>
+                    <motion.button 
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={() => setShowHistoryPopup(false)}
+                      className="rounded-full bg-white/20 p-1.5 hover:bg-white/30 transition-colors"
+                    >
+                      <X size={20} />
+                    </motion.button>
+                  </div>
+                  
+                  <div className="p-4 border-b border-gray-200 flex flex-wrap gap-3 justify-between items-center bg-gray-50">
+                    <div className="flex items-center gap-3">
+                      <div className="relative inline-block">
+                        <select 
+                          value={filterType}
+                          onChange={(e) => setFilterType(e.target.value as 'all' | 'earned' | 'spent')}
+                          className="appearance-none pl-10 pr-8 py-2 border border-gray-300 bg-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-amber-500 cursor-pointer"
+                        >
+                          <option value="all">Tous les points</option>
+                          <option value="earned">Points gagnés</option>
+                          <option value="spent">Points utilisés</option>
+                        </select>
+                        <Filter size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+                      </div>
+                      
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={toggleSortOrder}
+                        className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg bg-white shadow-sm hover:bg-gray-50"
+                      >
+                        <span className="text-sm font-medium text-gray-700">Date</span>
+                        {sortOrder === 'desc' ? (
+                          <ArrowDownUp size={16} className="text-gray-500" />
+                        ) : (
+                          <ChevronsUpDown size={16} className="text-gray-500" />
+                        )}
+                      </motion.button>
+                    </div>
+                    
+                    <div className="text-sm text-gray-500">
+                      {getFilteredHistory().length} opérations
+                    </div>
+                  </div>
+                  
+                  <div className="overflow-y-auto max-h-[60vh] p-1">
+                    <table className="w-full">
+                      <thead className="sticky top-0 z-10">
+                        <tr className="bg-gray-100 shadow-sm">
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                          <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                          <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Points</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {getFilteredHistory().map((item, i) => (
+                          <motion.tr 
+                            key={item.id}
+                            custom={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.03, duration: 0.2 }}
+                            whileHover={{ backgroundColor: "rgba(249, 250, 251, 1)" }}
+                            className="hover:bg-gray-50 transition-colors"
+                          >
+                            <td className="px-4 py-3 text-sm text-gray-700 whitespace-nowrap">{item.date}</td>
+                            <td className="px-4 py-3 text-sm text-gray-700">{item.action}</td>
+                            <td className={`px-4 py-3 text-sm font-medium text-right whitespace-nowrap ${item.points.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                              {item.points}
+                            </td>
+                          </motion.tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div className="p-4 border-t border-gray-200 bg-gray-50 text-right">
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => setShowHistoryPopup(false)}
+                      className="px-5 py-2.5 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium rounded-lg shadow-sm hover:from-amber-600 hover:to-yellow-600 transition-colors"
+                    >
+                      Fermer
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+
           <motion.button 
             whileHover={{ scale: 1.1, rotate: 10 }}
             whileTap={{ scale: 0.9 }}
@@ -395,7 +553,6 @@ export default function RewardsPage() {
             <HelpCircle size={24} />
           </motion.button>
 
-          {/* Bottom Menu */}
           <BottomMenu />
         </>
       )}

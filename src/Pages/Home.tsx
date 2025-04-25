@@ -3,7 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import BottomMenu from "../components/bottom-menu"
 import { 
   X, Check, Clock, Sparkles, Award, Lightbulb, ChevronRight, 
-  Heart, Calendar, Map, Star, Compass, Search, HelpCircle, User, MessageCircle
+  Heart, Calendar, Map, Star, Compass, Search, HelpCircle, User, MessageCircle,
+  Wifi, Coffee, Utensils, Bath, Phone
 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -16,6 +17,9 @@ export default function Home() {
   const [showQuestionnairePopup, setShowQuestionnairePopup] = useState(false)
   const [popupAnimation, setPopupAnimation] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [showHotelPopup, setShowHotelPopup] = useState(false)
+  const [selectedHotel, setSelectedHotel] = useState<number | null>(null)
+  const [hotelPopupAnimation, setHotelPopupAnimation] = useState(false)
 
   const getHotelImage = (index: number) => {
     return `${DEFAULT_HOTEL_IMAGE}&sig=${index}`;
@@ -116,10 +120,165 @@ export default function Home() {
     navigate("/negociation")
   }
   
-  
   const handleSuggestionsNavigation = () => {
     navigate("/search?tab=suggestions")
   }
+
+  const hotelData = [
+    {
+      id: 1, 
+      name: "Hôtel Royal 1", 
+      type: "Chambre Deluxe",
+      rating: 4.1,
+      price: 135,
+      description: "Situé au cœur de la ville, cet hôtel de luxe propose des chambres élégantes et spacieuses avec une vue imprenable. Profitez d'un service exceptionnel et d'équipements haut de gamme pour un séjour parfait.",
+      address: "12 Avenue des Champs-Élysées, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant", "Piscine"],
+      distance: "1.2 km du centre",
+      status: "Confirmé"
+    },
+    {
+      id: 2, 
+      name: "Hôtel Royal 2", 
+      type: "Chambre Deluxe",
+      rating: 4.2,
+      price: 145,
+      description: "Un havre de paix en plein centre urbain, offrant des chambres modernes et confortables. L'établissement est réputé pour son petit-déjeuner gourmand et son spa relaxant.",
+      address: "45 Rue de Rivoli, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant", "Bar"],
+      distance: "0.8 km du centre",
+      status: "En attente"
+    },
+    {
+      id: 3, 
+      name: "Hôtel Royal 3", 
+      type: "Chambre Supérieure",
+      rating: 4.3,
+      price: 155,
+      description: "Cet élégant hôtel boutique allie charme d'antan et confort moderne. Les chambres sont décorées avec goût et offrent tout le confort nécessaire pour un séjour réussi.",
+      address: "8 Boulevard Haussmann, Paris",
+      amenities: ["Wifi", "Restaurant", "Room Service"],
+      distance: "1.5 km du centre",
+      status: "Réservé"
+    },
+    {
+      id: 4, 
+      name: "Hôtel Royal 4", 
+      type: "Suite Junior",
+      rating: 4.4,
+      price: 175,
+      description: "Un établissement emblématique offrant un service personnalisé et des installations modernes. Parfait pour les voyageurs d'affaires comme pour les touristes souhaitant découvrir la ville.",
+      address: "22 Rue de la Paix, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant", "Salle de sport"],
+      distance: "0.5 km du centre",
+      status: "Réservé"
+    },
+    {
+      id: 5, 
+      name: "Hôtel Royal 5", 
+      type: "Suite Exécutive",
+      rating: 4.5,
+      price: 195,
+      description: "Découvrez le luxe à la française dans cet hôtel prestigieux. Les chambres spacieuses, le service impeccable et l'emplacement central en font un choix idéal pour votre séjour.",
+      address: "228 Rue de Rivoli, Paris",
+      amenities: ["Wifi", "Piscine", "Spa", "Restaurants"],
+      distance: "0.3 km du centre",
+      status: "Réservé"
+    }
+  ];
+  
+  const suggestedHotelData = [
+    {
+      id: 11, 
+      name: "Grand Hôtel 1", 
+      type: "Chambre Deluxe",
+      rating: 4.3,
+      price: 135,
+      description: "Une expérience de luxe inoubliable dans un cadre historique unique. Cet hôtel prestigieux offre des chambres somptueuses et un service personnalisé qui dépasse toutes les attentes.",
+      address: "2 Avenue Montaigne, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant", "Concierge"],
+      distance: "0.5 km du centre",
+      discount: null,
+      isTopPick: true
+    },
+    {
+      id: 12, 
+      name: "Grand Hôtel 2", 
+      type: "Chambre Supérieure",
+      rating: 4.4,
+      price: 145,
+      description: "Idéalement situé pour explorer la ville, cet hôtel moderne propose des chambres confortables au design contemporain et une excellente offre gastronomique.",
+      address: "15 Boulevard Malesherbes, Paris",
+      amenities: ["Wifi", "Restaurant", "Bar", "Fitness"],
+      distance: "1.2 km du centre",
+      discount: "15%",
+      isTopPick: false
+    },
+    {
+      id: 13, 
+      name: "Grand Hôtel 3", 
+      type: "Suite Junior",
+      rating: 4.5,
+      price: 155,
+      description: "Dans un quartier animé et tendance, cet hôtel au design unique vous offre une expérience mémorable avec des chambres élégantes et un restaurant étoilé.",
+      address: "36 Rue du Faubourg Saint-Honoré, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant Étoilé"],
+      distance: "1.8 km du centre",
+      discount: null,
+      isTopPick: false
+    },
+    {
+      id: 14, 
+      name: "Grand Hôtel 4", 
+      type: "Suite Exécutive",
+      rating: 4.6,
+      price: 165,
+      description: "Profitez d'un séjour de luxe dans cet hôtel raffiné, offrant des chambres spacieuses avec balcon, un spa complet et une vue spectaculaire sur la ville.",
+      address: "5 Avenue de l'Opéra, Paris",
+      amenities: ["Wifi", "Spa", "Restaurant", "Terrasse"],
+      distance: "0.9 km du centre",
+      discount: "15%",
+      isTopPick: false
+    },
+    {
+      id: 15, 
+      name: "Grand Hôtel 5", 
+      type: "Suite Présidentielle",
+      rating: 4.7,
+      price: 185,
+      description: "L'alliance parfaite du charme historique et du confort moderne. Cet établissement prestigieux vous accueille dans un cadre somptueux avec des services exceptionnels.",
+      address: "19 Avenue Kléber, Paris",
+      amenities: ["Wifi", "Spa", "Piscine", "Restaurants"],
+      distance: "1.1 km du centre",
+      discount: null,
+      isTopPick: false
+    }
+  ];
+
+  const handleHotelClick = (id: number, isReservation = true) => {
+    setSelectedHotel(id);
+    setShowHotelPopup(true);
+    setTimeout(() => {
+      setHotelPopupAnimation(true);
+    }, 100);
+  };
+
+  const handleCloseHotelPopup = () => {
+    setHotelPopupAnimation(false);
+    setTimeout(() => {
+      setShowHotelPopup(false);
+      setSelectedHotel(null);
+    }, 300);
+  };
+
+  const getSelectedHotelDetails = () => {
+    if (!selectedHotel) return null;
+    
+    const reservationHotel = hotelData.find(hotel => hotel.id === selectedHotel);
+    if (reservationHotel) return reservationHotel;
+    
+    return suggestedHotelData.find(hotel => hotel.id === selectedHotel);
+  };
 
   return (
     <div className="w-full bg-gradient-to-b from-white to-gray-50 min-h-screen flex flex-col">
@@ -287,18 +446,19 @@ export default function Home() {
               </motion.div>
 
               <div className="flex gap-3 md:gap-4 lg:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory">
-                {[1, 2, 3, 4, 5].map((item, i) => (
+                {hotelData.map((hotel, i) => (
                   <motion.div 
-                    key={item}
+                    key={hotel.id}
                     custom={i}
                     variants={cardVariants}
                     whileHover="hover"
-                    className="min-w-[230px] md:min-w-[260px] lg:min-w-[280px] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white"
+                    onClick={() => handleHotelClick(hotel.id)}
+                    className="min-w-[230px] md:min-w-[260px] lg:min-w-[280px] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer"
                   >
                     <div className="relative h-32 md:h-36 lg:h-40">
                       <img
-                        src={getHotelImage(item)}
-                        alt="Hôtel"
+                        src={getHotelImage(hotel.id)}
+                        alt={hotel.name}
                         className="object-cover h-full w-full"
                       />
                       <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-2">
@@ -307,12 +467,12 @@ export default function Home() {
                           <span className="font-medium">21/06 - 24/06</span>
                         </div>
                       </div>
-                      {item === 1 && (
+                      {hotel.id === 1 && (
                         <div className="absolute bottom-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded shadow-sm">
                           Confirmé
                         </div>
                       )}
-                      {item === 2 && (
+                      {hotel.id === 2 && (
                         <div className="absolute bottom-2 right-2 bg-amber-500 text-white text-xs px-2 py-1 rounded shadow-sm">
                           En attente
                         </div>
@@ -320,13 +480,13 @@ export default function Home() {
                     </div>
                     <div className="p-3">
                       <div className="flex justify-between items-start">
-                        <h3 className="font-medium">Hôtel Royal {item}</h3>
+                        <h3 className="font-medium">{hotel.name}</h3>
                         <div className="flex items-center">
                           <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                          <span className="text-xs ml-1">{4.0 + item * 0.1}</span>
+                          <span className="text-xs ml-1">{hotel.rating}</span>
                         </div>
                       </div>
-                      <p className="text-sm text-gray-600 mt-1">Chambre Deluxe</p>
+                      <p className="text-sm text-gray-600 mt-1">{hotel.type}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -424,21 +584,22 @@ export default function Home() {
               </motion.div>
 
               <div className="flex gap-3 md:gap-4 lg:gap-5 overflow-x-auto pb-2 snap-x snap-mandatory">
-                {[1, 2, 3, 4, 5].map((item, i) => (
+                {suggestedHotelData.map((hotel, i) => (
                   <motion.div 
-                    key={item}
+                    key={hotel.id}
                     custom={i}
                     variants={cardVariants}
                     whileHover="hover"
-                    className="min-w-[220px] md:min-w-[260px] lg:min-w-[300px] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white"
+                    onClick={() => handleHotelClick(hotel.id, false)}
+                    className="min-w-[220px] md:min-w-[260px] lg:min-w-[300px] flex-shrink-0 snap-center rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-white cursor-pointer"
                   >
                     <div className="relative h-36 md:h-40 lg:h-48">
                       <img
-                        src={getHotelImage(item + 10)}
-                        alt="Hôtel"
+                        src={getHotelImage(hotel.id)}
+                        alt={hotel.name}
                         className="object-cover h-full w-full"
                       />
-                      {item === 1 && (
+                      {hotel.isTopPick && (
                         <motion.div 
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
@@ -448,9 +609,9 @@ export default function Home() {
                           Top recommandation
                         </motion.div>
                       )}
-                      {item % 2 === 0 && (
+                      {hotel.discount && (
                         <div className="absolute top-2 left-2 bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full shadow-sm">
-                          -15% aujourd'hui
+                          -{hotel.discount} aujourd'hui
                         </div>
                       )}
                       <motion.div 
@@ -463,19 +624,22 @@ export default function Home() {
                     </div>
                     <div className="p-3">
                       <div className="flex justify-between items-start mb-1">
-                        <h3 className="font-medium">Grand Hôtel {item}</h3>
+                        <h3 className="font-medium">{hotel.name}</h3>
                         <div className="flex items-center bg-gray-100 px-1.5 py-0.5 rounded">
                           <Star size={14} className="text-yellow-500 fill-yellow-500" />
-                          <span className="text-xs ml-0.5">{4.2 + item * 0.1}</span>
+                          <span className="text-xs ml-0.5">{hotel.rating}</span>
                         </div>
                       </div>
                       <div className="flex justify-between items-center mt-2">
                         <div className="flex space-x-1">
-                          <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full">Wifi</span>
-                          <span className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full">Spa</span>
+                          {hotel.amenities.slice(0, 2).map((amenity, index) => (
+                            <span key={index} className="inline-block bg-purple-100 text-purple-800 text-xs px-2 py-0.5 rounded-full">
+                              {amenity}
+                            </span>
+                          ))}
                         </div>
                         <div className="text-sm font-bold text-purple-600">
-                          {125 + item * 10}€<span className="text-xs font-normal">/nuit</span>
+                          {hotel.price}€<span className="text-xs font-normal">/nuit</span>
                         </div>
                       </div>
                     </div>
@@ -600,6 +764,128 @@ export default function Home() {
                       </motion.button>
                     </div>
                   </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Popup d'hôtel */}
+          <AnimatePresence>
+            {showHotelPopup && (
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/40"
+                onClick={handleCloseHotelPopup}
+              >
+                <motion.div 
+                  className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: hotelPopupAnimation ? 1 : 0.9, opacity: hotelPopupAnimation ? 1 : 0 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {getSelectedHotelDetails() && (
+                    <>
+                      <div className="relative">
+                        <img 
+                          src={getHotelImage(getSelectedHotelDetails()!.id)} 
+                          alt={getSelectedHotelDetails()!.name} 
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/60"></div>
+                        <motion.button 
+                          whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={handleCloseHotelPopup}
+                          className="absolute top-4 right-4 rounded-full bg-white/20 hover:bg-white/40 p-1.5 transition-all duration-300 text-white"
+                        >
+                          <X size={18} />
+                        </motion.button>
+                        
+                        <div className="absolute bottom-4 left-4 text-white">
+                          <h2 className="text-xl font-bold">{getSelectedHotelDetails()!.name}</h2>
+                          <div className="flex items-center gap-1.5 text-sm mt-1">
+                            <Map size={14} />
+                            <span>{getSelectedHotelDetails()!.address}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="absolute bottom-4 right-4 bg-white rounded-lg px-2 py-1 flex items-center">
+                          <Star size={16} className="text-yellow-500 fill-yellow-500" />
+                          <span className="font-medium ml-1">{getSelectedHotelDetails()!.rating}</span>
+                        </div>
+                      </div>
+                      
+                      <div className="p-5">
+                        <div className="mb-4">
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {getSelectedHotelDetails()!.amenities.map((amenity, index) => (
+                              <div key={index} className="bg-purple-100 text-purple-800 text-xs px-3 py-1 rounded-full flex items-center gap-1">
+                                {amenity === "Wifi" && <Wifi size={12} />}
+                                {amenity === "Spa" && <Bath size={12} />}
+                                {amenity === "Restaurant" && <Utensils size={12} />}
+                                {amenity === "Bar" && <Coffee size={12} />}
+                                {amenity === "Piscine" && <Sparkles size={12} />}
+                                <span>{amenity}</span>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          <h3 className="text-lg font-semibold mb-2">Description</h3>
+                          <p className="text-gray-700 text-sm">{getSelectedHotelDetails()!.description}</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-5">
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Type de chambre</p>
+                            <p className="font-medium">{getSelectedHotelDetails()!.type}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Prix par nuit</p>
+                            <p className="font-bold text-purple-600">{getSelectedHotelDetails()!.price}€</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Distance</p>
+                            <p className="font-medium">{getSelectedHotelDetails()!.distance}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">Dates</p>
+                            <p className="font-medium">21/06 - 24/06</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex justify-between items-center">
+                          <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="flex items-center gap-1.5 text-gray-600 px-3 py-1.5 rounded-lg border border-gray-300 text-sm"
+                          >
+                            <Phone size={16} />
+                            <span>Contacter</span>
+                          </motion.button>
+                          
+                          <motion.button
+                            whileHover={{ scale: 1.05, boxShadow: "0 10px 15px -3px rgba(52, 73, 94, 0.2)" }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => {
+                              handleCloseHotelPopup();
+                              setTimeout(() => {
+                                navigate(`/room`);
+                              }, 300);
+                            }}
+                            className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-medium rounded-lg shadow-sm flex items-center gap-2"
+                          >
+                            <span>Voir détails</span>
+                            <ChevronRight size={16} />
+                          </motion.button>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               </motion.div>
             )}
