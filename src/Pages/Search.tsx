@@ -167,7 +167,7 @@ export default function HotelSearchPage() {
     }, 1000)
   }
 
-  const handleSelectHotel = () => {
+  const handleSelectHotel = (hotelId = 1) => {
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
@@ -201,19 +201,16 @@ export default function HotelSearchPage() {
     )
   }
 
-  // Toggle favorite
   const toggleFavorite = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsFavorite(!isFavorite)
   }
 
-  // Animation pour les filtres
   const filterVariants = {
     hidden: { opacity: 0, scale: 0.8 },
     visible: { opacity: 1, scale: 1, transition: { type: "spring", stiffness: 300, damping: 25 } }
   }
 
-  // Liste pour les résultats d'hôtels
   const hotelsList = [
     { id: 1, name: "Hôtel Splendid", rating: 4.5, price: 120, distance: 0.8, promotion: true, image: DEFAULT_HOTEL_IMAGE, services: ["wifi", "parking", "piscine"] },
     { id: 2, name: "Grand Hôtel", rating: 4.2, price: 95, distance: 1.2, promotion: false, image: DEFAULT_HOTEL_IMAGE+"&sig=1", services: ["wifi", "restaurant"] },
@@ -221,7 +218,6 @@ export default function HotelSearchPage() {
     { id: 4, name: "Résidence du Port", rating: 3.9, price: 80, distance: 1.5, promotion: false, image: DEFAULT_HOTEL_IMAGE+"&sig=3", services: ["wifi", "parking"] },
   ]
 
-  // Services icons mapping
   const serviceIcons: Record<string, JSX.Element> = {
     wifi: <Wifi size={16} className="mr-1" />,
     parking: <MapPin size={16} className="mr-1" />,
@@ -230,11 +226,9 @@ export default function HotelSearchPage() {
     spa: <Palmtree size={16} className="mr-1" />
   }
 
-  // Fonctions de rendu pour chaque écran
   const renderSearchForm = () => {
     return (
       <div className="flex flex-col h-full relative">
-        {/* Header avec gradient et animation de particules */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -310,7 +304,6 @@ export default function HotelSearchPage() {
           </motion.div>
         </motion.header>
 
-        {/* Search Form with improved animations */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -319,7 +312,6 @@ export default function HotelSearchPage() {
           className="flex-1 p-6 md:p-8 lg:p-10 overflow-y-auto relative"
           ref={searchRef}
         >
-          {/* Animated Welcome Message */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -330,7 +322,6 @@ export default function HotelSearchPage() {
             <p className="text-gray-500 mt-1">Remplissez le formulaire ci-dessous pour trouver votre hôtel parfait</p>
           </motion.div>
 
-          {/* Search Bar with animated focus effect */}
           <motion.div 
             variants={itemVariants}
             custom={0}
@@ -356,7 +347,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.div>
 
-          {/* Date Inputs with improved design */}
           <motion.section 
             variants={itemVariants}
             custom={1}
@@ -400,7 +390,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* Location Input with animation */}
           <motion.section 
             variants={itemVariants}
             custom={2}
@@ -427,7 +416,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* Accommodation Type with new design */}
           <motion.section 
             variants={itemVariants}
             custom={3}
@@ -509,7 +497,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
 
-          {/* People and Room Dropdowns with animations */}
           <motion.section 
             variants={itemVariants}
             custom={4}
@@ -539,13 +526,15 @@ export default function HotelSearchPage() {
                       <Users size={18} className={`mr-2 ${expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}`} />
                       <span>{searchForm.people.adults} adulte(s), {searchForm.people.children} enfant(s)</span>
                     </div>
-                    <motion.span 
-                      animate={{ rotate: expandedDropdown === "people" ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}
-                    >
-                      ▼
-                    </motion.span>
+                    <div className="flex items-center space-x-3">
+                      <motion.span 
+                        animate={{ rotate: expandedDropdown === "people" ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={expandedDropdown === "people" ? "text-purple-600" : "text-gray-500"}
+                      >
+                        ▼
+                      </motion.span>
+                    </div>
                   </motion.button>
 
                   <AnimatePresence>
@@ -626,13 +615,15 @@ export default function HotelSearchPage() {
                       <Home size={18} className={`mr-2 ${expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}`} />
                       <span>{searchForm.rooms} chambre(s)</span>
                     </div>
-                    <motion.span 
-                      animate={{ rotate: expandedDropdown === "rooms" ? 180 : 0 }}
-                      transition={{ duration: 0.3 }}
-                      className={expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}
-                    >
-                      ▼
-                    </motion.span>
+                    <div className="flex items-center space-x-3">
+                      <motion.span 
+                        animate={{ rotate: expandedDropdown === "rooms" ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className={expandedDropdown === "rooms" ? "text-purple-600" : "text-gray-500"}
+                      >
+                        ▼
+                      </motion.span>
+                    </div>
                   </motion.button>
 
                   <AnimatePresence>
@@ -675,7 +666,6 @@ export default function HotelSearchPage() {
             </div>
           </motion.section>
           
-          {/* Filter tags with animations */}
           <motion.section 
             variants={itemVariants}
             custom={5}
@@ -740,7 +730,6 @@ export default function HotelSearchPage() {
             </AnimatePresence>
           </motion.section>
           
-          {/* Services with hover effects */}
           <motion.section 
             variants={itemVariants}
             custom={6}
@@ -785,7 +774,6 @@ export default function HotelSearchPage() {
           </motion.section>
         </motion.main>
 
-        {/* Footer with floating action button */}
         <motion.footer
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -827,7 +815,6 @@ export default function HotelSearchPage() {
   const renderSearchResults = () => {
     return (
       <div className="flex flex-col h-full">
-        {/* Header avec gradient avancé et animations */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -903,7 +890,6 @@ export default function HotelSearchPage() {
           </motion.div>
         </motion.header>
 
-        {/* Barre de recherche flottante pour filtrer */}
         <div className="sticky top-0 z-20 bg-white px-4 py-3 shadow-md border-b border-gray-100">
           <motion.div 
             initial={{ opacity: 0, y: -10 }}
@@ -927,7 +913,6 @@ export default function HotelSearchPage() {
           </motion.div>
         </div>
 
-        {/* Results Content with animations */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -935,7 +920,6 @@ export default function HotelSearchPage() {
           exit="exit"
           className="flex-1 p-5 md:p-6 lg:p-8 overflow-y-auto"
         >
-          {/* Filter Pills */}
           <motion.div 
             variants={itemVariants}
             custom={0}
@@ -964,7 +948,6 @@ export default function HotelSearchPage() {
             ))}
           </motion.div>
 
-          {/* Quick Filters */}
           <motion.div 
             variants={itemVariants}
             custom={1}
@@ -1006,7 +989,6 @@ export default function HotelSearchPage() {
             </motion.div>
           </motion.div>
 
-          {/* Hotel Results Cards */}
           <motion.section 
             variants={itemVariants}
             custom={2}
@@ -1136,7 +1118,6 @@ export default function HotelSearchPage() {
           </motion.section>
         </motion.main>
 
-        {/* Map Button (floating) */}
         <motion.button 
           initial={{ opacity: 0, scale: 0, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1156,7 +1137,6 @@ export default function HotelSearchPage() {
   const renderHotelDetail = () => {
     return (
       <div className="flex flex-col h-full">
-        {/* Header avec gradient et fonctionnalités */}
         <motion.header 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1181,7 +1161,6 @@ export default function HotelSearchPage() {
             />
           </div>
 
-          {/* Image principale avec caroussel */}
           <div className="relative w-full h-64 md:h-72 lg:h-80">
             <motion.div 
               initial={{ opacity: 0 }}
@@ -1271,7 +1250,6 @@ export default function HotelSearchPage() {
           </div>
         </motion.header>
 
-        {/* Main Content with hotel details */}
         <motion.main 
           variants={containerVariants}
           initial="hidden"
@@ -1301,7 +1279,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.div>
 
-            {/* Overview section */}
             <motion.section
               variants={itemVariants}
               custom={1}
@@ -1337,7 +1314,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.section>
 
-            {/* Services section */}
             <motion.section
               variants={itemVariants}
               custom={2}
@@ -1361,7 +1337,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.section>
 
-            {/* Location section */}
             <motion.section
               variants={itemVariants}
               custom={3}
@@ -1393,7 +1368,6 @@ export default function HotelSearchPage() {
               </div>
             </motion.section>
 
-            {/* Additional info */}
             <motion.section
               variants={itemVariants}
               custom={4}
@@ -1449,7 +1423,6 @@ export default function HotelSearchPage() {
           </div>
         </motion.main>
 
-        {/* Floating Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -1473,6 +1446,7 @@ export default function HotelSearchPage() {
             }}
             whileTap={{ scale: 0.97 }}
             className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl py-3 font-medium shadow-md"
+            onClick={() => navigate('/room?hotel=1')}
           >
             <span>Réserver</span>
             <ArrowRight size={18} />
