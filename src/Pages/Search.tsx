@@ -285,7 +285,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10"
+            className="relative z-10 mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-xl md:h-18 md:w-18">
               <img
@@ -871,7 +871,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10"
+            className="relative z-10 mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-lg md:h-18 md:w-18">
               <img
@@ -1118,18 +1118,6 @@ export default function HotelSearchPage() {
           </motion.section>
         </motion.main>
 
-        <motion.button 
-          initial={{ opacity: 0, scale: 0, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0 }}
-          transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-          whileHover={{ scale: 1.1, boxShadow: "0 15px 25px -5px rgba(124, 58, 237, 0.4)" }}
-          whileTap={{ scale: 0.9 }}
-          className="fixed bottom-20 right-4 z-20 bg-gradient-to-r from-purple-600 to-indigo-700 text-white p-3.5 rounded-full shadow-lg"
-          onClick={handleMapNavigation}
-        >
-          <Map className="w-5 h-5" />
-        </motion.button>
       </div>
     )
   }
@@ -1255,7 +1243,7 @@ export default function HotelSearchPage() {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="flex-1 overflow-y-auto"
+          className="flex-1 overflow-y-auto pb-24"
         >
           <div className="bg-white p-5">
             <motion.div 
@@ -1371,7 +1359,7 @@ export default function HotelSearchPage() {
             <motion.section
               variants={itemVariants}
               custom={4}
-              className="py-6"
+              className="py-6 mb-16" 
             >
               <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center gap-2">
                 <Clock size={20} className="text-purple-600" />
@@ -1420,41 +1408,42 @@ export default function HotelSearchPage() {
                 </div>
               </div>
             </motion.section>
+            
+            <motion.section
+              variants={itemVariants}
+              custom={5}
+              className="py-6 border-t border-gray-200 bg-white"
+            >
+              <div className="flex justify-between gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.03, backgroundColor: "#f9fafb" }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl py-3 font-medium"
+                >
+                  <Phone size={18} className="text-gray-600" />
+                  <span>Contacter</span>
+                </motion.button>
+                
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.03, 
+                    boxShadow: "0 10px 25px -5px rgba(124, 58, 237, 0.5)",
+                    backgroundImage: "linear-gradient(to right, #7c3aed, #6366f1)" 
+                  }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl py-3 font-medium shadow-md"
+                  onClick={() => navigate('/room?hotel=1')}
+                >
+                  <span>Réserver</span>
+                  <ArrowRight size={18} />
+                </motion.button>
+              </div>
+            </motion.section>
           </div>
         </motion.main>
-
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.5 }}
-          className="fixed bottom-16 left-0 right-0 p-4 flex justify-between gap-3 bg-white border-t border-gray-200 shadow-lg"
-        >
-          <motion.button
-            whileHover={{ scale: 1.03, backgroundColor: "#f9fafb" }}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl py-3 font-medium"
-          >
-            <Phone size={18} className="text-gray-600" />
-            <span>Contacter</span>
-          </motion.button>
-          
-          <motion.button
-            whileHover={{ 
-              scale: 1.03, 
-              boxShadow: "0 10px 25px -5px rgba(124, 58, 237, 0.5)",
-              backgroundImage: "linear-gradient(to right, #7c3aed, #6366f1)" 
-            }}
-            whileTap={{ scale: 0.97 }}
-            className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-700 text-white rounded-xl py-3 font-medium shadow-md"
-            onClick={() => navigate('/room?hotel=1')}
-          >
-            <span>Réserver</span>
-            <ArrowRight size={18} />
-          </motion.button>
-        </motion.div>
       </div>
-    );
-  };
+    )
+  }
 
   const renderLoadingScreen = () => {
     return (
