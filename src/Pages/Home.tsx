@@ -158,7 +158,7 @@ export default function Home() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-              className="relative mr-15"
+              className="relative mr-0 md:mr-15"
             >
               <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-lg md:h-20 md:w-20" onClick={handleProfileNavigation}>
                 <img
@@ -175,7 +175,7 @@ export default function Home() {
               </motion.div>
             </motion.div>
           </motion.header>
-
+          
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}

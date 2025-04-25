@@ -285,7 +285,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10 mr-15"
+            className="relative z-10 mr-0 md:mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-xl md:h-18 md:w-18">
               <img
@@ -871,7 +871,7 @@ export default function HotelSearchPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-            className="relative z-10 mr-15"
+            className="relative z-10 mr-0 md:mr-15"
           >
             <div className="h-16 w-16 rounded-full border-2 border-white overflow-hidden shadow-lg md:h-18 md:w-18">
               <img
